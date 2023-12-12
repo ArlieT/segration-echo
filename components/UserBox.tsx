@@ -80,7 +80,14 @@ const UserBox = ({ username, scores }: UserBoxProps) => {
             backgroundColor: "rgba(63, 133, 239, 0.10)",
           }}
         >
-          <Link href={`/${username}`}>
+          <Link
+            replace
+            href={{
+              pathname: "/users/[userId]",
+              params: { userId: username },
+            }}
+          >
+            {/* //  href={`/users/${username}`}> */}
             <BlueText>Details</BlueText>
           </Link>
         </TouchableOpacity>

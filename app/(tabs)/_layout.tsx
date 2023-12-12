@@ -31,9 +31,6 @@ export default function TabLayout() {
           // borderRadius: 32,
         },
         tabBarActiveTintColor: Colors["light"].tint,
-        // tabBarBackground: () => {
-        //   return <Text>testhhhh</Text>;
-        // },
         tabBarActiveBackgroundColor: "rgba(63, 133, 239, 0.10)",
       }}
     >
@@ -66,8 +63,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="third"
+        name="users"
         options={{
+          // href: null,
           title: "Users",
           tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
         }}
