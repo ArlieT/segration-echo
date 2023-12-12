@@ -57,7 +57,6 @@ const UserBox = ({ username, scores }: UserBoxProps) => {
                 lightColor="#eee"
                 darkColor="rgba(255,255,255,0.1)"
               />
-              {/* )} */}
             </React.Fragment>
           );
         })}
@@ -72,7 +71,7 @@ const UserBox = ({ username, scores }: UserBoxProps) => {
           gap: 12,
         }}
       >
-        <Text>{username}</Text>
+        <Text style={{ fontWeight: "500", color: "#1E1E1E" }}>{username}</Text>
         <TouchableOpacity
           style={{
             paddingVertical: 6,

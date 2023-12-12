@@ -40,6 +40,7 @@ const users = [
   },
 ];
 export default function TabOneScreen() {
+  console.log("index");
   return (
     <SafeAreaView style={styles.container}>
       <View
@@ -50,11 +51,17 @@ export default function TabOneScreen() {
           backgroundColor: "#fff",
           alignSelf: "flex-start",
           height: 60,
-          width: 120,
+          width: 100,
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <Text style={{ textAlign: "left", color: "black" }}>Humidity</Text>
-        <Text style={{ fontSize: 24, fontWeight: "800" }}>24.4h</Text>
+        <Text style={{ alignSelf: "flex-start", color: "black" }}>
+          Humidity
+        </Text>
+        <Text style={{ fontSize: 24, fontWeight: "700", color: "black" }}>
+          24.4h
+        </Text>
       </View>
       <ScrollView
         style={{
