@@ -28,7 +28,7 @@ export default function TabLayout() {
       screenOptions={{
         tabBarStyle: {
           height: 62,
-          // borderRadius: 32,
+          borderRadius: 32,
         },
         tabBarActiveTintColor: Colors["light"].tint,
         tabBarActiveBackgroundColor: "rgba(63, 133, 239, 0.10)",

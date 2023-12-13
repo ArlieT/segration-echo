@@ -1,14 +1,22 @@
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
+import { StyleSheet } from "react-native";
+import { Text, View } from "../../components/Themed";
+import { ScrollView } from "react-native-gesture-handler";
+import UserBox from "../../components/UserBox";
+import { users } from "../../constants/fakeusers";
 
 export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
+      <View className="bg-[#fbfbfb] h-[38%]">
+        <Text className="text-black text-left w-full pl-2 text-md font-medium">
+          Top 3
+        </Text>
+        <ScrollView className="space-y-2">
+          {users.map(({ username, scores }, index) => (
+            <UserBox username={username} scores={scores} key={index} />
+          ))}
+        </ScrollView>
+      </View>
     </View>
   );
 }
@@ -16,16 +24,17 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fbfbfb",
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   separator: {
     marginVertical: 30,
     height: 1,
-    width: '80%',
+    width: "80%",
   },
 });

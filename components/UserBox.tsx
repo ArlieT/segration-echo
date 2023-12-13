@@ -133,7 +133,7 @@ type BoxProps = {
 const Box = ({ label, score }: BoxProps) => {
   return (
     <View style={styles.box}>
-      <Text style={{ color: "#3E3B3B", fontWeight: "400" }}>{label}</Text>
+      <Text className="">{label}</Text>
       <BlueText children={score} style={{ fontWeight: "bold", fontSize: 16 }} />
     </View>
   );
