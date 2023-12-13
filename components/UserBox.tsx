@@ -83,8 +83,8 @@ const UserBox = ({ username, scores }: UserBoxProps) => {
           <Link
             replace
             href={{
-              pathname: "/users/[userId]",
-              params: { userId: username },
+              pathname: `/users/${username}`,
+              // params: { userId: username },
             }}
           >
             {/* //  href={`/users/${username}`}> */}
