@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "./Themed";
 import { Pressable, StyleSheet, Text } from "react-native";
-import { BlueText } from "./StyledText";
+import { BlackText, BlueText } from "./StyledText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Link } from "expo-router";
 // type Score={
@@ -21,21 +21,20 @@ type UserBoxProps = {
 
 const UserBox = ({ username, scores }: UserBoxProps) => {
   const bins = [
-    { label: "Plastics", plasticSCore: scores.plastic },
-    { label: "Papers", paperScore: scores.paper },
-    { label: "Cans", canScore: scores.can },
+    { label: "Plastics", plasticSCore: scores.plastic, username },
+    { label: "Papers", paperScore: scores.paper, username },
+    { label: "Cans", canScore: scores.can, username },
   ];
   return (
-    <View style={styles.container}>
+    <View style={styles.container} className="w-full">
       <View
-        style={{
-          width: "70%",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "row",
-          backgroundColor: "#fff",
-        }}
+        className="text-black relative w-full justify-center items-start bg-white flex flex-row"
+        style={{ flexDirection: "row" }}
       >
+        <View style={styles.box} className="text-black">
+          <Text className="font-bold">User</Text>
+          <BlackText children={username} style={{ fontSize: 16 }} />
+        </View>
         {bins.map((item, index) => {
           return (
             <React.Fragment key={index}>
@@ -132,9 +131,10 @@ type BoxProps = {
 };
 const Box = ({ label, score }: BoxProps) => {
   return (
-    <View style={styles.box}>
-      <Text className="">{label}</Text>
-      <BlueText children={score} style={{ fontWeight: "bold", fontSize: 16 }} />
+    <View style={styles.box} className="text-black">
+      <Text className="font-bold">{label}</Text>
+      {/* <BlueText children={score} style={{ fontWeight: "bold", fontSize: 16 }} /> */}
+      <BlackText children={score} style={{ fontSize: 16 }} />
     </View>
   );
 };

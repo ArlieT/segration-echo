@@ -3,10 +3,12 @@ import { Text, View } from "../../components/Themed";
 import { ScrollView } from "react-native-gesture-handler";
 import UserBox from "../../components/UserBox";
 import { users } from "../../constants/fakeusers";
+import Splash from "../../components/Splash";
 
 export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
+      <Splash />
       <View className="bg-[#fbfbfb] h-[38%]">
         <Text className="text-black text-left w-full pl-2 text-md font-medium">
           Top 3

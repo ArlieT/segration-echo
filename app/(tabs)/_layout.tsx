@@ -1,23 +1,13 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  useColorScheme,
-} from "react-native";
-
+import { Pressable, StyleSheet, View, useColorScheme } from "react-native";
 import Colors from "../../constants/Colors";
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={26} style={{ marginTop: 10 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -27,17 +17,20 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarStyle: {
-          height: 62,
+          height: 64,
           borderRadius: 32,
+          margin: 10,
+          backgroundColor: "#051C2E",
+          justifyContent: "center",
+          alignItems: "center",
         },
-        tabBarActiveTintColor: Colors["light"].tint,
-        tabBarActiveBackgroundColor: "rgba(63, 133, 239, 0.10)",
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Bins",
+          tabBarLabel: "", // Remove the label
           tabBarIcon: ({ color }) => <TabBarIcon name="trash" color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
@@ -45,8 +38,7 @@ export default function TabLayout() {
                 {({ pressed }) => (
                   <FontAwesome
                     name="info-circle"
-                    size={25}
-                    color={Colors["light"].text}
+                    // color={Colors["light"].text}
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                   />
                 )}
@@ -59,6 +51,7 @@ export default function TabLayout() {
         name="home"
         options={{
           title: "Home",
+          tabBarLabel: "", // Remove the label
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
@@ -70,6 +63,7 @@ export default function TabLayout() {
           },
           title: "Users",
           headerShown: false,
+          tabBarLabel: "", // Remove the label
           tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
         }}
       />

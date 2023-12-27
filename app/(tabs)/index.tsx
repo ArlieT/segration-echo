@@ -1,87 +1,127 @@
-import { StyleSheet } from "react-native";
-import { Text, View } from "../../components/Themed";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import UserBox from "../../components/UserBox";
 import PaperBin from "../../components/bin/PaperBin";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { users } from "../../constants/fakeusers";
+import LottieView from "lottie-react-native";
 
 export default function TabOneScreen() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+
   console.log("index");
+
   return (
-    <View
-      className="bg-[#fbfbfb] border flex justify-center items-center h-full max-h-[100vh]"
-      // style={styles.container}
-    >
-      <ScrollView
-        className="border px-2 py-4 border-red-400 space-y-2"
-        contentContainerStyle={{
-          // height: "100%",
-          // flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <View
-          style={{
-            borderRadius: 6,
-            padding: 6,
-            backgroundColor: "#fff",
-            alignSelf: "flex-start",
-            height: 120,
-            width: 100,
-          }}
-        >
-          <Text className="text-black place-content-start self-start">
-            Humidity
-          </Text>
-          <Text
-            className="inset-0 m-auto"
-            style={{ fontSize: 24, fontWeight: "700", color: "black" }}
-          >
-            24.4h
-          </Text>
+    <>
+      {true ? (
+        <View className="flex-1 justify-center items-cener">
+          <Text className="text-center">test</Text>
+          <LottieView
+            source={require("../../assets/animated/Trash.json")}
+            // progress={animationProgress.current}
+            autoPlay
+            loop
+          />
         </View>
-        <View className="border border-blue-400 bg-[#fbfbfb] h-[40%]">
-          <Text className="text-black text-left w-full p-2 pl-2 text-md font-medium">
-            Top 3
-          </Text>
-          <ScrollView
-            // className="space-y-2"
-            contentContainerStyle={{ height: "100%" }}
-          >
-            {users.map(({ username, scores }, index) => (
-              <UserBox username={username} scores={scores} key={index} />
-            ))}
-          </ScrollView>
+      ) : (
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Hi User!</Text>
+            <View style={styles.headerBackground}>
+              <Text style={styles.headerTextWhite}>Together, lets Clean!</Text>
+            </View>
+          </View>
+          <View style={styles.top3Container}>
+            <Text style={styles.top3Text}>Top 3</Text>
+            <ScrollView style={styles.scrollView}>
+              {users.map(({ username, scores }, index) => (
+                <UserBox username={username} scores={scores} key={index} />
+              ))}
+              {users.map(({ username, scores }, index) => (
+                <UserBox username={username} scores={scores} key={index} />
+              ))}
+            </ScrollView>
+          </View>
+          {/* Uncomment the following block when needed */}
+          {/* <View style={styles.bottomContainer}>
+            <PaperBin label="Plactic Bin" />
+            <PaperBin label="Paper Bin" />
+            <PaperBin label="Can Bin" />
+          </View> */}
         </View>
-        <View className="flex-1 p-2 h-full flex flex-row border bg-[#fbfbfb]">
-          <PaperBin label="Plactic Bin" />
-          <PaperBin label="Paper Bin" />
-          <PaperBin label="Can Bin" />
-        </View>
-      </ScrollView>
-    </View>
+      )}
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#FBFBFB",
     flex: 1,
-    alignItems: "center",
+    backgroundColor: "#f1efee",
+    flexDirection: "column",
+    height: "100%",
+    padding: 0,
+  },
+  header: {
+    padding: 16,
+    backgroundColor: "#f1efee",
     justifyContent: "center",
-    gap: 4,
-    borderWidth: 1,
+    alignItems: "center",
+    marginBottom: "10%",
+    height: "12%",
+    flexDirection: "column",
+    top: 20,
   },
-  title: {
+  headerText: {
+    bottom: "55%",
     color: "black",
-    fontSize: 20,
+    alignSelf: "flex-start",
+    textAlign: "left",
     fontWeight: "bold",
+    fontSize: 18,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  headerBackground: {
+    backgroundColor: "#051c2e",
+    height: "100%",
+    position: "absolute",
+    bottom: -6,
+    width: "90%",
+    borderRadius: 16,
+    justifyContent: "center",
   },
+  headerTextWhite: {
+    textAlign: "center",
+    color: "white",
+    margin: "auto",
+  },
+  top3Container: {
+    borderRadius: 16,
+    backgroundColor: "#fbfbfb",
+    height: "40%",
+  },
+  top3Text: {
+    color: "black",
+    textAlign: "left",
+    width: "100%",
+    padding: 8,
+    paddingLeft: 16,
+    fontSize: 16,
+    fontWeight: "medium",
+  },
+  scrollView: {
+    marginVertical: 2,
+  },
+  // Uncomment the following block when needed
+  // bottomContainer: {
+  //   flex: 0.5,
+  //   padding: 8,
+  //   flexDirection: "row",
+  //   borderRadius: 16,
+  //   backgroundColor: "#fbfbfb",
+  // },
 });
