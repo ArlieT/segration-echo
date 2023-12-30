@@ -6,8 +6,11 @@ const _layout = () => {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ title: "Users" }}
-        // options={{ headerShown: false }}
+        options={{ title: "Users", headerShown: false }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="[user]"
+        options={{ title: "Users", headerShown: false }}
       ></Stack.Screen>
     </Stack>
   );

@@ -3,13 +3,19 @@ import { StyleSheet, Text, View, ScrollView } from "react-native";
 import UserBox from "../../components/UserBox";
 import { users } from "../../constants/fakeusers";
 import Loading from "../../components/Loading";
+import Bin from "../../components/bin/Bin";
+
 export default function TabOneScreen() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    /* mock loading */
+    const min = 1000;
+    const max = 2000;
+    const randomValue = Math.floor(Math.random() * (max - min + 1) + min);
     setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, randomValue);
   }, []);
 
   return (
@@ -17,7 +23,7 @@ export default function TabOneScreen() {
       {isLoading ? (
         <Loading />
       ) : (
-        <View style={styles.container}>
+        <View style={styles.container} className="gap-y-2">
           <View style={styles.header}>
             <Text style={styles.headerText}>Hi User!</Text>
             <View style={styles.headerBackground}>
@@ -25,22 +31,20 @@ export default function TabOneScreen() {
             </View>
           </View>
           <View style={styles.top3Container}>
-            <Text className="">Top 3</Text>
+            <Text className="mb-2 text-base">Top 3 most points</Text>
             <ScrollView style={styles.scrollView}>
-              {users.map(({ username, scores }, index) => (
-                <UserBox username={username} scores={scores} key={index} />
-              ))}
-              {users.map(({ username, scores }, index) => (
+              {users.slice(0, 3).map(({ username, scores }, index) => (
                 <UserBox username={username} scores={scores} key={index} />
               ))}
             </ScrollView>
           </View>
           {/* Uncomment the following block when needed */}
-          {/* <View style={styles.bottomContainer}>
-            <PaperBin label="Plactic Bin" />
-            <PaperBin label="Paper Bin" />
-            <PaperBin label="Can Bin" />
-          </View> */}
+
+          <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-1">
+            <Bin label="Plactic Bin" percentage="100" color="#96C7C1" />
+            <Bin label="Paper Bin" percentage="10" color="#FEF9EF" />
+            <Bin label="Can Bin" percentage="30" color="#FF9800" />
+          </View>
         </View>
       )}
     </>
@@ -53,7 +57,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f1efee",
     flexDirection: "column",
     height: "100%",
-    padding: 0,
+    padding: 5,
   },
   header: {
     padding: 16,
@@ -90,7 +94,8 @@ const styles = StyleSheet.create({
   top3Container: {
     borderRadius: 16,
     backgroundColor: "#fbfbfb",
-    height: "40%",
+    height: "50%",
+    padding: 10,
   },
   top3Text: {
     color: "black",
@@ -104,12 +109,4 @@ const styles = StyleSheet.create({
   scrollView: {
     marginVertical: 2,
   },
-  // Uncomment the following block when needed
-  // bottomContainer: {
-  //   flex: 0.5,
-  //   padding: 8,
-  //   flexDirection: "row",
-  //   borderRadius: 16,
-  //   backgroundColor: "#fbfbfb",
-  // },
 });

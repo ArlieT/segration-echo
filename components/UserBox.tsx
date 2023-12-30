@@ -1,94 +1,45 @@
+import { View, Text, Pressable } from "react-native";
 import React from "react";
-import { View } from "./Themed";
-import { Pressable, StyleSheet, Text } from "react-native";
-import { BlackText, BlueText } from "./StyledText";
+import { TUsers } from "../constants/fakeusers";
+import { Link, router } from "expo-router";
+import AnimatedLottieView from "lottie-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Link } from "expo-router";
-// type Score={
+import { styled } from "nativewind";
+import Score from "./Score";
 
-// }
-const Scores = {
-  Plastics: {},
-};
-type UserBoxProps = {
-  username: string;
-  scores: {
-    paper: number;
-    can: number;
-    plastic: number;
-  };
-};
+const StyledPressable = styled(Pressable);
+const StyledText = styled(Text);
 
-const UserBox = ({ username, scores }: UserBoxProps) => {
-  const bins = [
-    { label: "Plastics", plasticSCore: scores.plastic, username },
-    { label: "Papers", paperScore: scores.paper, username },
-    { label: "Cans", canScore: scores.can, username },
-  ];
+const UserBox = ({
+  className,
+  scores,
+  username,
+}: TUsers & { className?: string }) => {
   return (
-    <View style={styles.container} className="w-full">
-      <View
-        className="text-black relative w-full justify-center items-start bg-white flex flex-row"
-        style={{ flexDirection: "row" }}
-      >
-        <View style={styles.box} className="text-black">
-          <Text className="font-bold">User</Text>
-          <BlackText children={username} style={{ fontSize: 16 }} />
-        </View>
-        {bins.map((item, index) => {
-          return (
-            <React.Fragment key={index}>
-              <Box
-                label={
-                  index === 0 ? "Plastics" : index === 1 ? "Cans" : "Papers"
-                }
-                score={
-                  index === 0
-                    ? scores.plastic
-                    : index === 1
-                    ? scores.can
-                    : scores.paper
-                }
-              />
-              {/* sepator  */}
-              <View
-                style={styles.separator}
-                lightColor="#eee"
-                darkColor="rgba(255,255,255,0.1)"
-              />
-            </React.Fragment>
-          );
-        })}
+    <View
+      style={{ elevation: 20 }}
+      className={`${className} shadow-md bg relative gray-300/50 max-h-[400px] mb-2 py-8 pt-12 bg-white w-full text-white justify-around items-center flex-row rounded-md`}
+    >
+      <View className="">
+        <Text className="font-bold">{username}</Text>
+        <AnimatedLottieView
+          autoPlay
+          style={{ width: 30, height: 30 }}
+          source={require("../assets/animated/user.json")}
+        />
       </View>
-      <View
-        style={{
-          width: "30%",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "white",
-          gap: 12,
-        }}
-      >
-        <Text style={{ fontWeight: "500", color: "#1E1E1E" }}>{username}</Text>
+      <Score label="Can" score={scores.can} />
+      <Score label="Plastic" score={scores.plastic} />
+      <Score label="Paper" score={scores.paper} />
+
+      <View className="h-4 absolute top-4 right-4 flex justify-center items-center px-2 ">
         <TouchableOpacity
-          style={{
-            paddingVertical: 6,
-            paddingHorizontal: 16,
-            borderRadius: 32,
-            backgroundColor: "rgba(63, 133, 239, 0.10)",
-          }}
+          onPress={() => router.replace(`/users/${username}`)}
+          className="  hover:bg-red-500  group-isolate gap-x-1 flex-row"
         >
-          <Link
-            replace
-            href={{
-              pathname: `/users/${username}`,
-              // params: { userId: username },
-            }}
-          >
-            {/* //  href={`/users/${username}`}> */}
-            <BlueText>Details</BlueText>
-          </Link>
+          <View className="group-isolate-hover:bg-red-500 w-1.5 h-1.5 rounded-full bg-gray-800"></View>
+          <View className="w-1.5 h-1.5 rounded-full bg-gray-800"></View>
+          <View className="w-1.5 h-1.5 rounded-full bg-gray-800"></View>
         </TouchableOpacity>
       </View>
     </View>
@@ -96,45 +47,3 @@ const UserBox = ({ username, scores }: UserBoxProps) => {
 };
 
 export default UserBox;
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    color: "#3E3B3B",
-    flexDirection: "row",
-    height: 78,
-    width: "100%",
-    padding: 12,
-    borderRadius: 7,
-    marginBottom: 10,
-  },
-  box: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 5,
-    backgroundColor: "#fff",
-    padding: 6,
-  },
-  separator: {
-    width: 0.1,
-    height: "100%",
-    backgroundColor: "rgba(169, 169, 169, 0.6)",
-  },
-});
-
-type BoxProps = {
-  label: string;
-  //   scores?: Pick<UserBoxProps,'scores'>;
-  score: number;
-};
-const Box = ({ label, score }: BoxProps) => {
-  return (
-    <View style={styles.box} className="text-black">
-      <Text className="font-bold">{label}</Text>
-      {/* <BlueText children={score} style={{ fontWeight: "bold", fontSize: 16 }} /> */}
-      <BlackText children={score} style={{ fontSize: 16 }} />
-    </View>
-  );
-};

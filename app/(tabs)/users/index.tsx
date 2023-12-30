@@ -1,44 +1,52 @@
-import { StyleSheet } from "react-native";
-import EditScreenInfo from "../../../components/EditScreenInfo";
+import { SafeAreaView, StyleSheet } from "react-native";
 import { Text, View } from "../../../components/Themed";
-import { ScrollView } from "react-native-gesture-handler";
 import UserBox from "../../../components/UserBox";
 import { users } from "../../../constants/fakeusers";
+import { ScrollView } from "react-native-gesture-handler";
+import React from "react";
 
-export default function TabTwoScreen() {
+export default function Users({}) {
   return (
-    <View style={styles.container}>
-      <View className="bg-[#fbfbfb] h-[38%]">
-        <Text className="text-black p-2 text-left w-full text-md font-medium">
-          Top 3
+    <SafeAreaView style={styles.container} className="">
+      <View className="bg-white p-4 w-full">
+        <Text className="text-black text-lg text-left w-full text-md">
+          Users
         </Text>
-        <ScrollView className="space-y-2">
-          {users.length ? (
-            users.map(({ username, scores }, index) => (
-              <UserBox username={username} scores={scores} key={index} />
-            ))
-          ) : (
-            <View>No data.</View>
-          )}
-        </ScrollView>
       </View>
-      <Text style={styles.title}>Tab Two</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
-    </View>
+
+      <ScrollView
+        className="space-y-2 w-full flex-1 mt-4"
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {users.length ? (
+          users.map(({ username, scores }, index) => (
+            <React.Fragment key={index}>
+              <UserBox username={username} scores={scores} key={index} />
+              <UserBox username={username} scores={scores} key={index} />
+              <UserBox username={username} scores={scores} key={index} />
+              <UserBox username={username} scores={scores} key={index} />
+            </React.Fragment>
+          ))
+        ) : (
+          <View>No data.</View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: "100%",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fbfbfb",
+    marginTop: 45,
+    marginBottom: 10,
   },
   title: {
     fontSize: 20,
