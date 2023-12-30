@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   bin: {
     height: 5,
     maxWidth: "100%",
-    borderRadius: 8,
+    borderRadius: 4,
   },
 });
 
