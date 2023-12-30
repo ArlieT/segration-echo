@@ -18,12 +18,12 @@ const Splash = () => {
 
   return (
     <View className="bg-red-500">
-      <LottieView
+      {/* <LottieView
         source={require("../assets/Trash.json")}
         // progress={animationProgress.current}
         autoPlay
         loop
-      />
+      /> */}
     </View>
   );
 };

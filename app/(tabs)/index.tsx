@@ -1,33 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import UserBox from "../../components/UserBox";
-import PaperBin from "../../components/bin/PaperBin";
 import { users } from "../../constants/fakeusers";
-import LottieView from "lottie-react-native";
-
+import Loading from "../../components/Loading";
 export default function TabOneScreen() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 2000);
   }, []);
-
-  console.log("index");
 
   return (
     <>
-      {true ? (
-        <View className="flex-1 justify-center items-cener">
-          <Text className="text-center">test</Text>
-          <LottieView
-            source={require("../../assets/animated/Trash.json")}
-            // progress={animationProgress.current}
-            autoPlay
-            loop
-          />
-        </View>
+      {isLoading ? (
+        <Loading />
       ) : (
         <View style={styles.container}>
           <View style={styles.header}>
@@ -37,7 +25,7 @@ export default function TabOneScreen() {
             </View>
           </View>
           <View style={styles.top3Container}>
-            <Text style={styles.top3Text}>Top 3</Text>
+            <Text className="">Top 3</Text>
             <ScrollView style={styles.scrollView}>
               {users.map(({ username, scores }, index) => (
                 <UserBox username={username} scores={scores} key={index} />
