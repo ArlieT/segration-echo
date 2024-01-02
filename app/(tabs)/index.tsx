@@ -41,9 +41,9 @@ export default function TabOneScreen() {
           {/* Uncomment the following block when needed */}
 
           <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-1">
-            <Bin label="Plactic Bin" percentage="100" color="#96C7C1" />
-            <Bin label="Paper Bin" percentage="10" color="#FEF9EF" />
-            <Bin label="Can Bin" percentage="30" color="#FF9800" />
+            <Bin label="Plactic Bin" percentage="100" color="#051c2e" />
+            <Bin label="Paper Bin" percentage="0" color="#051c2e" />
+            <Bin label="Can Bin" percentage="30" color="#051c2e" />
           </View>
         </View>
       )}

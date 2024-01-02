@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
   withSpring,
   useAnimatedStyle,
+  runOnJS,
 } from "react-native-reanimated";
 
 const Bin = ({
@@ -18,8 +19,14 @@ const Bin = ({
   const height = useSharedValue(Number(percentage));
 
   const handlePress = () => {
+    const incVal = Number((percentage += 10));
+
     height.value = withSpring(height.value + 10);
+    // increaseHeight(incVal);
   };
+  // const increaseHeight = (incValue: number) => {
+  //   return (height. withSpring(height.value + ));
+  // };
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -27,15 +34,24 @@ const Bin = ({
     };
   });
 
+  useEffect(() => {
+    console.log(",test", animatedStyle.height);
+    console.log(height);
+  }, [height]);
+
+  console.log(height);
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={handlePress}>
-        <Text>Test</Text>
+        <Text>INC</Text>
+        <Text>{animatedStyle?.height}</Text>
       </TouchableOpacity>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.relativeContainer} className=" overflow-hidden">
         <View style={styles.absoluteContainer}>
-          <Text style={styles.percentageText}>{percentage}%</Text>
+          <Text style={styles.percentageText}>
+            {Math.floor(height?.value)}%
+          </Text>
         </View>
         <Animated.View
           style={[styles.bin, { backgroundColor: color }, animatedStyle]}
@@ -79,7 +95,12 @@ const styles = StyleSheet.create({
   percentageText: {
     position: "relative",
     zIndex: 10,
-    color: "black",
+    // color: "black",
+    backgroundColor: "#051c2e",
+    borderRadius: 10,
+    padding: 4,
+    paddingHorizontal: 8,
+    color: "white",
   },
   bin: {
     height: 5,
