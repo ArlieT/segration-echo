@@ -25,9 +25,6 @@ export default function Users({}) {
           users.map(({ username, scores }, index) => (
             <React.Fragment key={index}>
               <UserBox username={username} scores={scores} key={index} />
-              <UserBox username={username} scores={scores} key={index} />
-              <UserBox username={username} scores={scores} key={index} />
-              <UserBox username={username} scores={scores} key={index} />
             </React.Fragment>
           ))
         ) : (

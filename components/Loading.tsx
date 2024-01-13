@@ -12,6 +12,7 @@ const Loading = () => {
         }}
         source={require("../assets/animated/Trash.json")}
       />
+
       <Text className="font-bold text-lg text-center">Loading...</Text>
     </View>
   );

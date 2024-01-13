@@ -1,12 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
 import UserBox from "../../components/UserBox";
 import { users } from "../../constants/fakeusers";
 import Loading from "../../components/Loading";
 import Bin from "../../components/bin/Bin";
+import { onValue } from "firebase/database";
+import firebaseRef from "../../firebase/ref";
+import BinModal, { ModalProps } from "../../components/BinModal";
+
+type TWeater = {
+  temperature: string;
+  humidity: string;
+};
+type TBin = {
+  plastic: string;
+  can: string;
+  paper: string;
+};
 
 export default function TabOneScreen() {
   const [isLoading, setIsLoading] = useState(true);
+  const [weather, setWeather] = useState<TWeater>();
+  const [bin, setBin] = useState<TBin>();
+  const [binCount, setBinCount] = useState<TBin>();
+
+  useEffect(() => {
+    onValue(firebaseRef("Bin"), (snapshot) => {
+      const data = snapshot.val();
+      setBin(data);
+    });
+    onValue(firebaseRef("BottleCount"), (snapshot) => {
+      const data = snapshot.val();
+      setBinCount(data);
+    });
+    onValue(firebaseRef("Weather"), (snapshot) => {
+      const data = snapshot.val();
+      setWeather(data);
+    });
+  }, []);
 
   useEffect(() => {
     /* mock loading */
@@ -18,16 +49,50 @@ export default function TabOneScreen() {
     }, randomValue);
   }, []);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [info, setInfo] = useState<ModalProps>();
+
   return (
     <>
       {isLoading ? (
         <Loading />
       ) : (
         <View style={styles.container} className="gap-y-2">
+          {isModalOpen && (
+            <BinModal
+              setIsModalOpen={setIsModalOpen}
+              percentage={info?.percentage}
+              count={info?.count}
+              label={info?.label}
+            />
+          )}
+
           <View style={styles.header}>
-            <Text style={styles.headerText}>Hi User!</Text>
-            <View style={styles.headerBackground}>
-              <Text style={styles.headerTextWhite}>Together, lets Clean!</Text>
+            <View style={styles.boxCon}>
+              <View style={{ padding: 10 }}>
+                <Text>Temperature</Text>
+                <View style={styles.box}>
+                  <Text
+                    style={{
+                      color: "white",
+                    }}
+                  >
+                    {weather?.temperature}c
+                  </Text>
+                </View>
+              </View>
+              <View style={{ padding: 10 }}>
+                <Text>Humidity</Text>
+                <View style={styles.box}>
+                  <Text
+                    style={{
+                      color: "white",
+                    }}
+                  >
+                    {weather?.humidity}%
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
           <View style={styles.top3Container}>
@@ -38,12 +103,34 @@ export default function TabOneScreen() {
               ))}
             </ScrollView>
           </View>
-          {/* Uncomment the following block when needed */}
 
           <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-1">
-            <Bin label="Plactic Bin" percentage="100" color="#96C7C1" />
-            <Bin label="Paper Bin" percentage="10" color="#FEF9EF" />
-            <Bin label="Can Bin" percentage="30" color="#FF9800" />
+            <Bin
+              label="Plactic Bin"
+              percentage={"80"}
+              count={binCount?.plastic}
+              // color="#051c2e"
+              color="rgba(5, 28, 46, 0.9)"
+              setInfo={setInfo}
+              setModal={setIsModalOpen}
+            />
+            <Bin
+              label="Paper Bin"
+              count={binCount?.paper}
+              percentage={bin?.paper}
+              // color="#051c2e"
+              color="rgba(5, 28, 46, 0.9)"
+              setInfo={setInfo}
+              setModal={setIsModalOpen}
+            />
+            <Bin
+              label="Can Bin"
+              count={binCount?.paper}
+              percentage={bin?.can}
+              color="rgba(5, 28, 46, 0.9)"
+              setInfo={setInfo}
+              setModal={setIsModalOpen}
+            />
           </View>
         </View>
       )}
@@ -53,6 +140,8 @@ export default function TabOneScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    position: "relative",
+    borderWidth: 1,
     flex: 1,
     backgroundColor: "#f1efee",
     flexDirection: "column",
@@ -69,8 +158,32 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     top: 20,
   },
+  boxCon: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    width: "100%",
+    borderRadius: 10,
+    minHeight: 80,
+    gap: 10,
+  },
+  box: {
+    backgroundColor: "rgba(5, 28, 46, 0.8)",
+    elevation: 20,
+    opacity: 10,
+    textAlign: "center",
+    padding: 10,
+
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    height: "80%",
+    maxWidth: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   headerText: {
-    bottom: "55%",
+    bottom: "25%",
     color: "black",
     alignSelf: "flex-start",
     textAlign: "left",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
@@ -9,39 +9,77 @@ import Animated, {
 const Bin = ({
   label,
   percentage,
+  count,
   color,
+  setModal,
+  setInfo,
 }: {
   color: string;
-  percentage: string;
+  percentage?: string;
+  count?: string;
   label: string;
+  setModal: (b: boolean) => void;
+  setInfo: (i: any) => void;
 }) => {
-  const height = useSharedValue(Number(percentage));
-
+  let height = useSharedValue(Number(percentage));
   const handlePress = () => {
-    height.value = withSpring(height.value + 10);
+    setModal(true);
+    if (height) height.value = withSpring(height.value + 10);
   };
 
-  const animatedStyle = useAnimatedStyle(() => {
+  let animatedStyle = useAnimatedStyle(() => {
     return {
-      height: `${height.value}%`,
+      height: `${height?.value}%`,
     };
   });
 
+  useEffect(() => {
+    if (height) height.value = withSpring(Number(percentage));
+  }, [percentage]);
+
+  useEffect(() => {
+    console.log(height);
+  }, [height]);
+
+  const handlePressBin = () => {
+    setModal(true);
+    setInfo({ count, percentage, label });
+  };
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={handlePress}>
-        <Text>Test</Text>
-      </TouchableOpacity>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.relativeContainer} className=" overflow-hidden">
-        <View style={styles.absoluteContainer}>
-          <Text style={styles.percentageText}>{percentage}%</Text>
+    <>
+      <View style={styles.container}>
+        {/* <TouchableOpacity onPress={handlePress}>
+          <Text>Test</Text>
+        </TouchableOpacity> */}
+        <Text className="text-[#051c2e] shadow-md font-bold z-10 inset-x-0 text-lg  m-auto text-center">
+          {percentage ?? 0}%
+        </Text>
+        <TouchableOpacity
+          className=" overflow-hidden"
+          style={styles.relativeContainer}
+          onPress={handlePressBin}
+        >
+          <Animated.View
+            style={[
+              styles.bin,
+              {
+                position: "absolute",
+                bottom: 0,
+                borderWidth: 1,
+                backgroundColor: color,
+                width: "100%",
+              },
+              animatedStyle,
+            ]}
+          />
+        </TouchableOpacity>
+        <View style={{}}>
+          <Text style={styles.label}>{label}</Text>
+          {/* <Text style={styles.percentageText}>Count:{count ?? 0}</Text> */}
         </View>
-        <Animated.View
-          style={[styles.bin, { backgroundColor: color }, animatedStyle]}
-        />
       </View>
-    </View>
+    </>
   );
 };
 
@@ -50,6 +88,7 @@ const styles = StyleSheet.create({
     width: "30%",
     borderRadius: 8,
     height: "100%",
+    textAlign: "center",
   },
   label: {
     fontWeight: "bold",
@@ -59,12 +98,13 @@ const styles = StyleSheet.create({
   },
   relativeContainer: {
     position: "relative",
-    justifyContent: "flex-end",
     flex: 1,
-    backgroundColor: "white",
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.1)",
+    borderColor: "rgba(123,123,0,0.1)",
     borderRadius: 8,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
   absoluteContainer: {
     position: "absolute",
@@ -80,6 +120,7 @@ const styles = StyleSheet.create({
     position: "relative",
     zIndex: 10,
     color: "black",
+    textAlign: "left",
   },
   bin: {
     height: 5,

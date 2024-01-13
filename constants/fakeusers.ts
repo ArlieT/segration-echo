@@ -8,7 +8,7 @@ export type TUsers = {
 };
 export const users: TUsers[] = [
   {
-    username: "test1",
+    username: "student1",
     scores: {
       paper: 12,
       can: 32,
@@ -16,7 +16,7 @@ export const users: TUsers[] = [
     },
   },
   {
-    username: "test2",
+    username: "student2",
     scores: {
       paper: 12,
       can: 123,
@@ -24,7 +24,7 @@ export const users: TUsers[] = [
     },
   },
   {
-    username: "test3",
+    username: "student3",
     scores: {
       paper: 12,
       can: 1,
@@ -32,7 +32,7 @@ export const users: TUsers[] = [
     },
   },
   {
-    username: "test4",
+    username: "student4",
     scores: {
       paper: 32,
       can: 21,

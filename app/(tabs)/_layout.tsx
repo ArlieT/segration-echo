@@ -29,7 +29,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Dashboard",
           tabBarLabel: "", // Remove the label
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
@@ -39,6 +39,7 @@ export default function TabLayout() {
                   <FontAwesome
                     name="info-circle"
                     // color={Colors["light"].text}
+                    size={24}
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                   />
                 )}
