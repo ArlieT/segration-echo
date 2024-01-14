@@ -17,7 +17,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarStyle: {
-          height: 64,
+          height: 68,
           borderRadius: 32,
           margin: 10,
           backgroundColor: "#051C2E",
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(63, 133, 239, 0.10)",
-    padding: 24,
+    padding: 26,
     borderRadius: 12,
   },
 });

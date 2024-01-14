@@ -141,7 +141,7 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     position: "relative",
-    borderWidth: 1,
+    // borderWidth: 1,
     flex: 1,
     backgroundColor: "#f1efee",
     flexDirection: "column",

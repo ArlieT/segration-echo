@@ -42,9 +42,9 @@ const Bin = ({
     height.value = withSpring(localPercentage);
   }, [localPercentage]);
   const handlePress = () => {
+
     height.value = withSpring(height.value + 10);
   };
-
   const animatedStyle = useAnimatedStyle(() => {
     return {
       height: `${height.value}%`,

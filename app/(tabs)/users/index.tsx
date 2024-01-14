@@ -15,7 +15,7 @@ export default function Users({}) {
       </View>
 
       <ScrollView
-        className="space-y-2 w-full flex-1 mt-4"
+        className="space-y-2 w-full p-2 flex-1 mt-4"
         contentContainerStyle={{
           justifyContent: "center",
           alignItems: "center",
