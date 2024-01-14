@@ -21,39 +21,49 @@ const Bin = ({
   setModal: (b: boolean) => void;
   setInfo: (i: any) => void;
 }) => {
-  let height = useSharedValue(Number(percentage));
-  const handlePress = () => {
-    setModal(true);
-    if (height) height.value = withSpring(height.value + 10);
-  };
-
-  let animatedStyle = useAnimatedStyle(() => {
-    return {
-      height: `${height?.value}%`,
-    };
-  });
+  const [localPercentage, setLocalPercentage] = useState(0);
+  const height = useSharedValue(localPercentage);
 
   useEffect(() => {
-    if (height) height.value = withSpring(Number(percentage));
+    const percentageParsed = Number(percentage);
+    console.log(percentage);
+    setTimeout(() => {
+      if (percentageParsed === 1) {
+        setLocalPercentage(30);
+      } else if (percentageParsed === 2) {
+        setLocalPercentage(50);
+      } else if (percentageParsed === 3) {
+        setLocalPercentage(100);
+      }
+    }, 1000);
   }, [percentage]);
 
   useEffect(() => {
-    console.log(height);
-  }, [height]);
+    height.value = withSpring(localPercentage);
+  }, [localPercentage]);
+  const handlePress = () => {
+    height.value = withSpring(height.value + 10);
+  };
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      height: `${height.value}%`,
+    };
+  });
 
   const handlePressBin = () => {
     setModal(true);
-    setInfo({ count, percentage, label });
+    setInfo({ count, percentage: localPercentage, label });
   };
 
   return (
     <>
       <View style={styles.container}>
         {/* <TouchableOpacity onPress={handlePress}>
-          <Text>Test</Text>
+          <Text>test</Text>
         </TouchableOpacity> */}
-        <Text className="text-[#051c2e] shadow-md font-bold z-10 inset-x-0 text-lg  m-auto text-center">
-          {percentage ?? 0}%
+        <Text className="text-[#051c2e]  shadow-md font-bold z-10 inset-x-0 text-lg  m-auto text-center">
+          {localPercentage ?? 0}%
         </Text>
         <TouchableOpacity
           className=" overflow-hidden"
@@ -76,7 +86,6 @@ const Bin = ({
         </TouchableOpacity>
         <View style={{}}>
           <Text style={styles.label}>{label}</Text>
-          {/* <Text style={styles.percentageText}>Count:{count ?? 0}</Text> */}
         </View>
       </View>
     </>

@@ -23,6 +23,8 @@ export default function TabOneScreen() {
   const [weather, setWeather] = useState<TWeater>();
   const [bin, setBin] = useState<TBin>();
   const [binCount, setBinCount] = useState<TBin>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [info, setInfo] = useState<ModalProps>();
 
   useEffect(() => {
     onValue(firebaseRef("Bin"), (snapshot) => {
@@ -48,9 +50,6 @@ export default function TabOneScreen() {
       setIsLoading(false);
     }, randomValue);
   }, []);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [info, setInfo] = useState<ModalProps>();
 
   return (
     <>
@@ -107,7 +106,7 @@ export default function TabOneScreen() {
           <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-1">
             <Bin
               label="Plactic Bin"
-              percentage={"80"}
+              percentage={bin?.plastic}
               count={binCount?.plastic}
               // color="#051c2e"
               color="rgba(5, 28, 46, 0.9)"
@@ -123,6 +122,7 @@ export default function TabOneScreen() {
               setInfo={setInfo}
               setModal={setIsModalOpen}
             />
+            <Text></Text>
             <Bin
               label="Can Bin"
               count={binCount?.paper}

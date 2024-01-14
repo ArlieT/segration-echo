@@ -4,11 +4,7 @@ import { TUsers } from "../constants/fakeusers";
 import { Link, router } from "expo-router";
 import AnimatedLottieView from "lottie-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { styled } from "nativewind";
 import Score from "./Score";
-
-const StyledPressable = styled(Pressable);
-const StyledText = styled(Text);
 
 const UserBox = ({
   className,
@@ -21,7 +17,7 @@ const UserBox = ({
       className={`${className} shadow-md bg relative gray-300/50 max-h-[400px] mb-2 py-6 pt-12 bg-white w-full text-white justify-around items-center flex-row rounded-md`}
     >
       <View className="">
-        <Text className="font-bold">{username}</Text>
+        <Text className="font-bold text">{username}</Text>
         <AnimatedLottieView
           autoPlay
           style={{ width: 30, height: 30 }}

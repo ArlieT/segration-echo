@@ -1,5 +1,5 @@
 {
-  "name": "eco-arcade",
+  "name": "echo",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
-    "@react-native-firebase/app": "^18.7.3",
     "@react-navigation/native": "^6.0.2",
     "expo": "~49.0.15",
     "expo-font": "~11.4.0",
