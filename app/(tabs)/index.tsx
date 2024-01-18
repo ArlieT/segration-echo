@@ -125,7 +125,7 @@ export default function TabOneScreen() {
             <Text></Text>
             <Bin
               label="Can Bin"
-              count={binCount?.paper}
+              count={binCount?.can}
               percentage={bin?.can}
               color="rgba(5, 28, 46, 0.9)"
               setInfo={setInfo}
