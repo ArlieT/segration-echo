@@ -9,6 +9,8 @@ import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
+import BottomSheetSignIn from "../components/BottomSheetSignIn";
+import { hydrateAuth } from "../_store/authStore";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -28,7 +30,7 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
-
+  hydrateAuth();
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
@@ -53,9 +55,11 @@ function RootLayoutNav() {
   return (
     // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
     <ThemeProvider value={DefaultTheme}>
-      <StatusBar style={"dark"} />
+      <StatusBar style={"light"} />
+      <BottomSheetSignIn />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </ThemeProvider>

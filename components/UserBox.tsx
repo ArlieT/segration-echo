@@ -14,7 +14,7 @@ const UserBox = ({
   return (
     <View
       style={{ elevation: 20 }}
-      className={`${className} border border-gray-300/50 w-[90%] shadow-md bg relative gray-300/50 max-h-[400px] mb-2 py-6 pt-12 bg-white w-full text-white justify-around items-center flex-row rounded-md`}
+      className={`${className} border border-gray-300/50 w-[90%] shadow-md bg relative gray-300/50 max-h-[400px] mb-2 py-6 pt-12 bg-white C/w-full text-white justify-around items-center flex-row rounded-md`}
     >
       <View className="justify-center items-center">
         <Text className="font-bold text">{username}</Text>

@@ -3,7 +3,7 @@ import { Link, Tabs } from "expo-router";
 import { Pressable, StyleSheet, View, useColorScheme } from "react-native";
 import Colors from "../../constants/Colors";
 
-function TabBarIcon(props: {
+export function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {

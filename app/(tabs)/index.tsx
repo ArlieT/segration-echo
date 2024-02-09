@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
-import UserBox from "../../components/UserBox";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { users } from "../../constants/fakeusers";
-import Loading from "../../components/Loading";
+import UserBox from "../../components/UserBox";
 import Bin from "../../components/bin/Bin";
+import Loading from "../../components/Loading";
 import { onValue } from "firebase/database";
 import firebaseRef from "../../firebase/ref";
 import BinModal, { ModalProps } from "../../components/BinModal";
+import { Link } from "expo-router";
 
 type TWeater = {
   temperature: string;
@@ -56,83 +57,89 @@ export default function TabOneScreen() {
       {isLoading ? (
         <Loading />
       ) : (
-        <View style={styles.container} className="gap-y-2">
-          {isModalOpen && (
-            <BinModal
-              setIsModalOpen={setIsModalOpen}
-              percentage={info?.percentage}
-              count={info?.count}
-              label={info?.label}
-            />
-          )}
-
-          <View style={styles.header}>
-            <View style={styles.boxCon}>
-              <View style={{ padding: 10 }}>
-                <Text>Temperature</Text>
-                <View style={styles.box}>
-                  <Text
-                    style={{
-                      color: "white",
-                    }}
-                  >
-                    {weather?.temperature}c
-                  </Text>
+        <>
+          <View style={styles.container} className="gap-y-2">
+            {isModalOpen && (
+              <BinModal
+                setIsModalOpen={setIsModalOpen}
+                percentage={info?.percentage}
+                count={info?.count}
+                label={info?.label}
+              />
+            )}
+            <View style={styles.header}>
+              <View style={styles.boxCon}>
+                <View style={{ padding: 10 }}>
+                  <Text>Temperature</Text>
+                  <View style={styles.box}>
+                    <Text
+                      style={{
+                        color: "white",
+                      }}
+                    >
+                      {weather?.temperature}c
+                    </Text>
+                  </View>
                 </View>
-              </View>
-              <View style={{ padding: 10 }}>
-                <Text>Humidity</Text>
-                <View style={styles.box}>
-                  <Text
-                    style={{
-                      color: "white",
-                    }}
-                  >
-                    {weather?.humidity}%
-                  </Text>
+                <View style={{ padding: 10 }}>
+                  <Text>Humidity</Text>
+                  <View style={styles.box}>
+                    <Text
+                      style={{
+                        color: "white",
+                      }}
+                    >
+                      {weather?.humidity}%
+                    </Text>
+                  </View>
+                </View>
+                <View style={{ padding: 10 }}>
+                  <View style={styles.box}>
+                    <Link href="/(auth)/">test link</Link>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-          <View style={styles.top3Container}>
-            <Text className="mb-2 text-base">Top 3 most points</Text>
-            <ScrollView style={styles.scrollView}>
-              {users.slice(0, 3).map(({ username, scores }, index) => (
-                <UserBox username={username} scores={scores} key={index} />
-              ))}
-            </ScrollView>
-          </View>
+            <View style={styles.top3Container}>
+              <Text className="mb-2 text-base">Top 3 most points</Text>
+              <ScrollView style={styles.scrollView}>
+                {users.slice(0, 3).map(({ username, scores }, index) => (
+                  <UserBox username={username} scores={scores} key={index} />
+                ))}
+              </ScrollView>
+            </View>
 
-          <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-1">
-            <Bin
-              label="Plactic Bin"
-              percentage={bin?.plastic}
-              count={binCount?.plastic}
-              // color="#051c2e"
-              color="rgba(5, 28, 46, 0.9)"
-              setInfo={setInfo}
-              setModal={setIsModalOpen}
-            />
-            <Bin
-              label="Paper Bin"
-              count={binCount?.paper}
-              percentage={bin?.paper}
-              // color="#051c2e"
-              color="rgba(5, 28, 46, 0.9)"
-              setInfo={setInfo}
-              setModal={setIsModalOpen}
-            />
-            <Text></Text>
-            <Bin
-              label="Can Bin"
-              count={binCount?.can}
-              percentage={bin?.can}
-              color="rgba(5, 28, 46, 0.9)"
-              setInfo={setInfo}
-              setModal={setIsModalOpen}
-            />
+            <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-1">
+              <Bin
+                label="Plactic Bin"
+                percentage={bin?.plastic}
+                count={binCount?.plastic}
+                // color="#051c2e"
+                color="rgba(5, 28, 46, 0.9)"
+                setInfo={setInfo}
+                setModal={setIsModalOpen}
+              />
+              <Bin
+                label="Paper Bin"
+                count={binCount?.paper}
+                percentage={bin?.paper}
+                // color="#051c2e"
+                color="rgba(5, 28, 46, 0.9)"
+                setInfo={setInfo}
+                setModal={setIsModalOpen}
+              />
+              <Text></Text>
+              <Bin
+                label="Can Bin"
+                count={binCount?.can}
+                percentage={bin?.can}
+                color="rgba(5, 28, 46, 0.9)"
+                setInfo={setInfo}
+                setModal={setIsModalOpen}
+              />
+            </View>
           </View>
-        </View>
+        </>
       )}
     </>
   );
@@ -141,12 +148,13 @@ export default function TabOneScreen() {
 const styles = StyleSheet.create({
   container: {
     position: "relative",
-    // borderWidth: 1,
     flex: 1,
     backgroundColor: "#f1efee",
     flexDirection: "column",
     height: "100%",
     padding: 5,
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
     padding: 16,
@@ -221,5 +229,14 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     marginVertical: 2,
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
+  containerHeadline: {
+    fontSize: 24,
+    fontWeight: "600",
+    padding: 20,
   },
 });
