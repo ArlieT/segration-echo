@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
-import { users } from "../../constants/fakeusers";
-import UserBox from "../../components/UserBox";
-import Bin from "../../components/bin/Bin";
-import Loading from "../../components/Loading";
+import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
+import { users } from "../../../constants/fakeusers";
+import UserBox from "../../../components/UserBox";
+import Bin from "../../../components/bin/Bin";
+import Loading from "../../../components/Loading";
 import { onValue } from "firebase/database";
-import firebaseRef from "../../firebase/ref";
-import BinModal, { ModalProps } from "../../components/BinModal";
-import { Link } from "expo-router";
+import firebaseRef from "../../../firebase/ref";
+import BinModal, { ModalProps } from "../../../components/BinModal";
+import { Link, useRouter } from "expo-router";
+import { useAuth } from "../../../_store/authStore";
 
 type TWeater = {
   temperature: string;
@@ -51,7 +52,6 @@ export default function TabOneScreen() {
       setIsLoading(false);
     }, randomValue);
   }, []);
-
   return (
     <>
       {isLoading ? (
@@ -67,40 +67,11 @@ export default function TabOneScreen() {
                 label={info?.label}
               />
             )}
-            <View style={styles.header}>
-              <View style={styles.boxCon}>
-                <View style={{ padding: 10 }}>
-                  <Text>Temperature</Text>
-                  <View style={styles.box}>
-                    <Text
-                      style={{
-                        color: "white",
-                      }}
-                    >
-                      {weather?.temperature}c
-                    </Text>
-                  </View>
-                </View>
-                <View style={{ padding: 10 }}>
-                  <Text>Humidity</Text>
-                  <View style={styles.box}>
-                    <Text
-                      style={{
-                        color: "white",
-                      }}
-                    >
-                      {weather?.humidity}%
-                    </Text>
-                  </View>
-                </View>
-                <View style={{ padding: 10 }}>
-                  <View style={styles.box}>
-                    <Link href="/(auth)/">test link</Link>
-                  </View>
-                </View>
-              </View>
-            </View>
-            <View style={styles.top3Container}>
+
+            <View
+              style={styles.top3Container}
+              className="flex-[1.5] outline outline-red-500"
+            >
               <Text className="mb-2 text-base">Top 3 most points</Text>
               <ScrollView style={styles.scrollView}>
                 {users.slice(0, 3).map(({ username, scores }, index) => (
@@ -109,7 +80,7 @@ export default function TabOneScreen() {
               </ScrollView>
             </View>
 
-            <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-1">
+            <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-[0.8]">
               <Bin
                 label="Plactic Bin"
                 percentage={bin?.plastic}

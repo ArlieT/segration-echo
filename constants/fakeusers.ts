@@ -39,4 +39,36 @@ export const users: TUsers[] = [
       plastic: 4,
     },
   },
+  {
+    username: "student4",
+    scores: {
+      paper: 32,
+      can: 21,
+      plastic: 4,
+    },
+  },
+  {
+    username: "student4",
+    scores: {
+      paper: 32,
+      can: 21,
+      plastic: 4,
+    },
+  },
+  {
+    username: "student4",
+    scores: {
+      paper: 32,
+      can: 21,
+      plastic: 4,
+    },
+  },
+  {
+    username: "student4",
+    scores: {
+      paper: 32,
+      can: 21,
+      plastic: 4,
+    },
+  },
 ];

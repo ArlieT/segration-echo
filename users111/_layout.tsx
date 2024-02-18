@@ -1,15 +1,13 @@
 import React from "react";
-import { Stack } from "expo-router";
+import { Stack, Tabs } from "expo-router";
+import { TabBarIcon } from "../app/(app)/(tabs)/_layout";
 
 const _layout = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="index"
-        options={{ title: "Users", headerShown: false }}
-      ></Stack.Screen>
-      <Stack.Screen
         name="[user]"
+        getId={({ params }) => String(Date.now())}
         options={{ title: "Users", headerShown: false }}
       ></Stack.Screen>
     </Stack>

@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link } from "expo-router";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { useAuth } from "../_store/authStore";
+import { useAuth } from "../../_store/authStore";
 
 const InformationTab = () => {
   const { signOut, status } = useAuth();

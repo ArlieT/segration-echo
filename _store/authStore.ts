@@ -1,8 +1,10 @@
 import { create } from "zustand";
 import { TCredential, getToken, removeToken, setToken } from "./_utils/auth";
 
+export type TStatus = "idle" | "signIn" | "signOut" | null;
 type AuthStore = {
-  status: "idle" | "signIn" | "signOut";
+  status: TStatus;
+  role: "STUDENT" | "ADMIN" | "";
   token: TCredential | null;
   signIn: (token: TCredential) => void;
   signOut: () => void;
@@ -12,26 +14,28 @@ type AuthStore = {
 const _useAuth = create<AuthStore>((set, get) => ({
   status: "idle",
   token: null,
-  signIn: (token: TCredential) => {
-    setToken(token);
+  role: "",
+  signIn: async (token: TCredential) => {
+    await setToken(token);
+    // console.log("token set!");
     set({ status: "signIn", token });
   },
   signOut: () => {
-    removeToken();
     set({ status: "signOut", token: null });
+    removeToken();
   },
   hydrate: async () => {
     try {
       const userToken = await getToken();
+      console.log({ userToken });
       if (userToken !== null) {
         get().signIn(userToken);
       } else {
         get().signOut();
       }
     } catch (e) {
-      get().signOut();
       // handle error here
-      // Maybe sign_out user!
+      get().signOut();
     }
   },
 }));

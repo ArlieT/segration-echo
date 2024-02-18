@@ -14,7 +14,7 @@ const UserBox = ({
   return (
     <View
       style={{ elevation: 20 }}
-      className={`${className} border border-gray-300/50 w-[90%] shadow-md bg relative gray-300/50 max-h-[400px] mb-2 py-6 pt-12 bg-white C/w-full text-white justify-around items-center flex-row rounded-md`}
+      className={`${className} w-full border border-gray-300/50 shadow-md bg relative gray-300/50 max-h-[400px] mb-2 py-6 pt-12 bg-white C/w-full text-white justify-around items-center flex-row rounded-md`}
     >
       <View className="justify-center items-center">
         <Text className="font-bold text">{username}</Text>
@@ -30,7 +30,9 @@ const UserBox = ({
 
       <View className="h-4 absolute top-4 right-4 flex justify-center items-center px-2 ">
         <TouchableOpacity
-          onPress={() => router.replace(`/users/${username}`)}
+          onPress={() =>
+            router.push({ pathname: `/${username}`, params: { username } })
+          }
           className="  hover:bg-red-500  group-isolate gap-x-1 flex-row"
         >
           <View className="group-isolate-hover:bg-red-500 w-1.5 h-1.5 rounded-full bg-gray-800"></View>
