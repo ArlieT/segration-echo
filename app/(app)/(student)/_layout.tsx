@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 import { Pressable, StyleSheet, View, useColorScheme } from "react-native";
-import Colors from "../../constants/Colors";
+import { useAuth } from "../../../_store/authStore";
 
 export function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -12,6 +12,8 @@ export function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { token, hydrate } = useAuth();
+  // hydrate(); //HYDRATE AUTH
 
   return (
     <Tabs
@@ -24,12 +26,13 @@ export default function TabLayout() {
           justifyContent: "center",
           alignItems: "center",
         },
+        headerShown: false,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Dashboard",
+          title: `Student ${token?.username}`,
           tabBarLabel: "", // Remove the label
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
@@ -48,24 +51,12 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="home"
-        options={{
-          title: "Home",
-          tabBarLabel: "", // Remove the label
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
-        }}
-      /> */}
       <Tabs.Screen
-        name="users"
+        name="about"
         options={{
-          href: {
-            pathname: "/users",
-          },
-          title: "Users",
-          headerShown: false,
+          headerShown: true,
           tabBarLabel: "", // Remove the label
-          tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="info" color={color} />,
         }}
       />
     </Tabs>

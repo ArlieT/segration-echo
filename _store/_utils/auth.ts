@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export type TCredential = {
   username: string;
   password: string;
+  role?: "STUDENT" | "ADMIN" | "";
 };
 const setToken = async (credential: TCredential) => {
   await AsyncStorage.setItem("user", JSON.stringify(credential));
