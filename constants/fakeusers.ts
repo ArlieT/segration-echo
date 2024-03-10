@@ -1,6 +1,6 @@
 export type TUsers = {
   username: string;
-  scores: {
+  bin_score: {
     paper: number;
     can: number;
     plastic: number;
@@ -9,66 +9,66 @@ export type TUsers = {
 export const users: TUsers[] = [
   {
     username: "student1",
-    scores: {
+    bin_score: {
       paper: 12,
-      can: 32,
-      plastic: 22,
-    },
+      can: 22,
+      plastic: 22
+    }
   },
   {
     username: "student2",
-    scores: {
+    bin_score: {
       paper: 12,
       can: 123,
-      plastic: 4,
-    },
+      plastic: 4
+    }
   },
   {
     username: "student3",
-    scores: {
+    bin_score: {
       paper: 12,
       can: 1,
-      plastic: 4,
-    },
+      plastic: 4
+    }
   },
   {
     username: "student4",
-    scores: {
+    bin_score: {
       paper: 32,
       can: 21,
-      plastic: 4,
-    },
+      plastic: 4
+    }
   },
   {
     username: "student4",
-    scores: {
+    bin_score: {
       paper: 32,
       can: 21,
-      plastic: 4,
-    },
+      plastic: 4
+    }
   },
   {
     username: "student4",
-    scores: {
+    bin_score: {
       paper: 32,
       can: 21,
-      plastic: 4,
-    },
+      plastic: 4
+    }
   },
   {
     username: "student4",
-    scores: {
+    bin_score: {
       paper: 32,
       can: 21,
-      plastic: 4,
-    },
+      plastic: 4
+    }
   },
   {
     username: "student4",
-    scores: {
+    bin_score: {
       paper: 32,
       can: 21,
-      plastic: 4,
-    },
-  },
+      plastic: 4
+    }
+  }
 ];

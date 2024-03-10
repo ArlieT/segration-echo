@@ -8,13 +8,6 @@ const InformationTab = () => {
   const { signOut, status } = useAuth();
   return (
     <View style={styles.container}>
-      <Text
-        onPress={() => {
-          signOut();
-        }}
-      >
-        Sign out {status}
-      </Text>
       <View
         style={{
           backgroundColor: "#051c2e",

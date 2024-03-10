@@ -4,15 +4,18 @@ import UserBox from "../../../components/UserBox";
 import { users } from "../../../constants/fakeusers";
 import { ScrollView } from "react-native-gesture-handler";
 import React from "react";
+import firebaseRef from "../../../firebase/ref";
+import { useList } from "react-firebase-hooks/database";
 
 export default function Users({}) {
+  const [studentList, loading, error] = useList(firebaseRef(`users/STUDENT`));
   return (
     <SafeAreaView style={styles.container} className="">
-      <View className="bg-white p-4 w-full">
+      {/* <View className="bg-white p-4 w-full">
         <Text className="text-black text-lg text-left w-full text-md">
-          Users
+          Students
         </Text>
-      </View>
+      </View> */}
 
       <ScrollView
         className="space-y-2 w-full p-2 flex-1 mt-4"
@@ -21,10 +24,14 @@ export default function Users({}) {
           alignItems: "center",
         }}
       >
-        {users.length ? (
-          users.map(({ username, scores }, index) => (
+        {studentList?.map.length ? (
+          studentList.map((v, index) => (
             <React.Fragment key={index}>
-              <UserBox username={username} scores={scores} key={index} />
+              <UserBox
+                username={v.val()?.username}
+                bin_score={v.val()?.bin_score}
+                key={index}
+              />
             </React.Fragment>
           ))
         ) : (
@@ -42,8 +49,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fbfbfb",
-    marginTop: 45,
-    marginBottom: 10,
+    padding: 10,
+    paddingVertical: 15,
   },
   title: {
     fontSize: 20,

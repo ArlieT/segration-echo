@@ -17,8 +17,7 @@ const _useAuth = create<AuthStore>((set, get) => ({
   role: "",
   signIn: async (token: TCredential) => {
     await setToken(token);
-    // console.log("token set!");
-    set({ status: "signIn", token });
+    set({ status: "signIn", token, ...token });
   },
   signOut: () => {
     set({ status: "signOut", token: null });

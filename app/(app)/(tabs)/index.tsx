@@ -1,13 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
-import { users } from "../../../constants/fakeusers";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
+import { StyleSheet, Text, View, ScrollView, Button } from "react-native";
 import UserBox from "../../../components/UserBox";
 import Bin from "../../../components/bin/Bin";
 import Loading from "../../../components/Loading";
 import { onValue } from "firebase/database";
 import firebaseRef from "../../../firebase/ref";
 import BinModal, { ModalProps } from "../../../components/BinModal";
-import { Link } from "expo-router";
+import { TCredential } from "../../../_store/_utils/auth";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import useBottomSheetController from "../../../_store/useBottomSheet";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { FontAwesome } from "@expo/vector-icons";
+import { users as Users } from "../../../constants/fakeusers";
+import { useList } from "react-firebase-hooks/database";
+import Weather from "../../../components/Weather";
+import { useNavigation } from "expo-router/src/useNavigation";
+import { NavigationProp } from "@react-navigation/native";
 
 type TWeater = {
   temperature: string;
@@ -19,17 +33,21 @@ type TBin = {
   paper: string;
 };
 
-export default function TabOneScreen() {
+export default function AdminScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [weather, setWeather] = useState<TWeater>();
   const [bin, setBin] = useState<TBin>();
   const [binCount, setBinCount] = useState<TBin>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [info, setInfo] = useState<ModalProps>();
+  const [users, setUsers] = useState<TCredential[]>();
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     onValue(firebaseRef("Bin"), (snapshot) => {
       const data = snapshot.val();
+      console.log("btin ", data);
       setBin(data);
     });
     onValue(firebaseRef("BottleCount"), (snapshot) => {
@@ -38,9 +56,24 @@ export default function TabOneScreen() {
     });
     onValue(firebaseRef("Weather"), (snapshot) => {
       const data = snapshot.val();
+      console.log("wetheader ", data);
       setWeather(data);
     });
+
+    onValue(firebaseRef("users"), (snapshot) => {
+      const data = snapshot.val();
+      setUsers(data);
+      console.log("users ", data);
+    });
   }, []);
+
+  const [studentList, loading, error] = useList(firebaseRef(`users/STUDENT`));
+
+  useEffect(() => {
+    studentList?.map((item, id) =>
+      console.log("student ", item.val()?.username)
+    );
+  }, [users, studentList]);
 
   useEffect(() => {
     /* mock loading */
@@ -52,9 +85,29 @@ export default function TabOneScreen() {
     }, randomValue);
   }, []);
 
+  const snapPoints = useMemo(() => ["80%"], []);
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        {...props}
+      />
+    ),
+    []
+  );
+
+  const { action } = useBottomSheetController();
+
+  const handleOpenPress = () => bottomSheetRef.current?.expand();
+  const handleClosePress = () => bottomSheetRef.current?.close();
+  const snapeToIndex = (index: number) =>
+    bottomSheetRef.current?.snapToIndex(index);
+
   return (
     <>
-      {isLoading ? (
+      {isLoading || loading ? (
         <Loading />
       ) : (
         <>
@@ -67,42 +120,31 @@ export default function TabOneScreen() {
                 label={info?.label}
               />
             )}
-            <View style={styles.header}>
-              <View style={styles.boxCon}>
-                <View style={{ padding: 10 }}>
-                  <Text>Temperature</Text>
-                  <View style={styles.box}>
-                    <Text
-                      style={{
-                        color: "white",
-                      }}
-                    >
-                      {weather?.temperature}c
-                    </Text>
-                  </View>
-                </View>
-                <View style={{ padding: 10 }}>
-                  <Text>Humidity</Text>
-                  <View style={styles.box}>
-                    <Text
-                      style={{
-                        color: "white",
-                      }}
-                    >
-                      {weather?.humidity}%
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
+            <Weather
+              temperature={weather?.temperature}
+              humidity={weather?.humidity}
+            />
             <View
               style={styles.top3Container}
               className="outline outline-red-500"
             >
-              <Text className="mb-2 text-base">Top 3 most points</Text>
+              <View className="flex flex-row justify-between">
+                <View>
+                  <Text className="mb-2 text-base">Top 3 students</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Students" as never)}
+                >
+                  <Text className="mb-2 text-base">See all students</Text>
+                </TouchableOpacity>
+              </View>
               <ScrollView style={styles.scrollView}>
-                {users.slice(0, 3).map(({ username, scores }, index) => (
-                  <UserBox username={username} scores={scores} key={index} />
+                {studentList?.slice(0, 3).map((v, index) => (
+                  <UserBox
+                    username={v.val()?.username}
+                    bin_score={v.val()?.bin_score}
+                    key={index}
+                  />
                 ))}
               </ScrollView>
             </View>
@@ -126,7 +168,6 @@ export default function TabOneScreen() {
                 setInfo={setInfo}
                 setModal={setIsModalOpen}
               />
-              <Text></Text>
               <Bin
                 label="Can Bin"
                 count={binCount?.can}
@@ -150,9 +191,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#f1efee",
     flexDirection: "column",
     height: "100%",
-    padding: 5,
+    padding: 10,
+    paddingVertical: 15,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   header: {
     padding: 16,
@@ -162,7 +204,7 @@ const styles = StyleSheet.create({
     marginBottom: "10%",
     height: "12%",
     flexDirection: "column",
-    top: 20,
+    top: 20
   },
   boxCon: {
     flexDirection: "row",
@@ -172,7 +214,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 10,
     minHeight: 80,
-    gap: 10,
+    gap: 10
   },
   box: {
     backgroundColor: "rgba(5, 28, 46, 0.8)",
@@ -186,7 +228,7 @@ const styles = StyleSheet.create({
     height: "80%",
     maxWidth: 100,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   headerText: {
     bottom: "25%",
@@ -194,7 +236,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     textAlign: "left",
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 18
   },
   headerBackground: {
     backgroundColor: "#051c2e",
@@ -203,18 +245,18 @@ const styles = StyleSheet.create({
     bottom: -6,
     width: "90%",
     borderRadius: 16,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   headerTextWhite: {
     textAlign: "center",
     color: "white",
-    margin: "auto",
+    margin: "auto"
   },
   top3Container: {
     borderRadius: 16,
     backgroundColor: "#fbfbfb",
     height: "50%",
-    padding: 10,
+    padding: 10
   },
   top3Text: {
     color: "black",
@@ -223,18 +265,81 @@ const styles = StyleSheet.create({
     padding: 8,
     paddingLeft: 16,
     fontSize: 16,
-    fontWeight: "medium",
+    fontWeight: "medium"
   },
   scrollView: {
-    marginVertical: 2,
+    marginVertical: 2
   },
   contentContainer: {
     flex: 1,
-    alignItems: "center",
+    alignItems: "center"
   },
+
   containerHeadline: {
     fontSize: 24,
     fontWeight: "600",
-    padding: 20,
-  },
+    padding: 20
+  }
 });
+
+// <BottomSheet
+//           ref={bottomSheetRef}
+//           index={0}
+//           snapPoints={snapPoints}
+//           enablePanDownToClose={true}
+//           backdropComponent={renderBackdrop}
+//           containerStyle={{
+//             zIndex: 9999,
+//             borderWidth: 1,
+//           }}
+//           backgroundStyle={{ backgroundColor: "#fff" }}
+//           containerHeight={{ value: 1000 }}
+//         >
+//           <TouchableOpacity
+//             onPress={() => info?.setIsModalOpen(false)}
+//             className="h-[40px]"
+//           >
+//             <FontAwesome
+//               name="info-circle"
+//               size={24}
+//               style={{ marginRight: 35, height: "100%" }}
+//               className="h-full"
+//             />
+//           </TouchableOpacity>
+//           <View style={styles.contentContainer} className="space-y-4">
+//             <Text className="text-white font-bold text-lg">
+//               {info?.label} info
+//             </Text>
+//             <View className="px-10 py-5 h-[30%] border w-full">
+//               <View
+//                 className="border h-full w-full"
+//                 style={{
+//                   borderRadius: 12,
+//                   padding: 20,
+//                   backgroundColor: "#051c2e",
+//                   gap: 12,
+//                 }}
+//               >
+//                 <Text style={{ fontSize: 16, color: "white" }}>
+//                   Count: {info?.count}
+//                 </Text>
+//                 <Text style={{ fontSize: 16, color: "white" }}>
+//                   Bin percentage: {info?.percentage}%
+//                 </Text>
+//               </View>
+//             </View>
+//             <View
+//               className="w-[50%] border h-[80%]"
+//               style={{ height: "50%" }}
+//             >
+//               <Bin
+//                 label="Can Bin"
+//                 count={binCount?.can}
+//                 percentage={bin?.can}
+//                 color="rgba(5, 28, 46, 0.9)"
+//                 setInfo={setInfo}
+//                 setModal={setIsModalOpen}
+//               />
+//             </View>
+//           </View>
+//         </BottomSheet>

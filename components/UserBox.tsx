@@ -5,12 +5,16 @@ import { Link, router } from "expo-router";
 import AnimatedLottieView from "lottie-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Score from "./Score";
+import { useNavigation } from "expo-router/src/useNavigation";
 
 const UserBox = ({
   className,
-  scores,
+  bin_score,
   username,
+  ...props
 }: TUsers & { className?: string }) => {
+  const navigation = useNavigation();
+  console.log(bin_score);
   return (
     <View
       style={{ elevation: 20 }}
@@ -24,15 +28,13 @@ const UserBox = ({
           source={require("../assets/animated/user.json")}
         />
       </View>
-      <Score label="Can" score={scores.can} />
-      <Score label="Plastic" score={scores.plastic} />
-      <Score label="Paper" score={scores.paper} />
+      <Score label="Can" score={bin_score?.can} />
+      <Score label="Plastic" score={bin_score?.plastic} />
+      <Score label="Paper" score={bin_score?.paper} />
 
       <View className="h-4 absolute top-4 right-4 flex justify-center items-center px-2 ">
         <TouchableOpacity
-          onPress={() =>
-            router.push({ pathname: `/${username}`, params: { username } })
-          }
+          onPress={() => navigation.navigate("User", { username })}
           className="  hover:bg-red-500  group-isolate gap-x-1 flex-row"
         >
           <View className="group-isolate-hover:bg-red-500 w-1.5 h-1.5 rounded-full bg-gray-800"></View>

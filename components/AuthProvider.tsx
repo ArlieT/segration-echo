@@ -13,6 +13,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     console.log({ segments });
     console.log({ token });
     console.log({ status });
+
     if (status === "signIn") return;
     if (status === "idle") {
       console.log("true");
@@ -21,7 +22,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     }
     if (status === "signOut" && segments === "(app)") {
       console.log("should sign in");
-      router.replace("/(auth)/signin");
+      router.replace("/signin");
     } else {
       router.replace("/");
     }

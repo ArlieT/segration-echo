@@ -10,6 +10,8 @@ import AnimatedLottieView from "lottie-react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
+import { users } from "../../constants/fakeusers";
+import mockUsers from "../../_constant/user";
 
 const Signin = ({ navigation }: any) => {
   const router = useRouter();
@@ -33,16 +35,19 @@ const Signin = ({ navigation }: any) => {
       return;
     }
     //TODO REPLACE WITH ACUTLA USER
-    if (credential.username === "admin" && credential.password === "admin") {
-      setTimeout(() => {
-        signIn({ role: "ADMIN", ...credential });
 
-        router.push("/");
-        setCredential({
-          username: "",
-          password: "",
-        });
-      }, 1500);
+    const user = mockUsers.filter(
+      (user) => user.username === username && user.password === password
+    )[0];
+
+    if (user) {
+      console.log("user found ", user);
+      signIn({ ...user });
+      if (user.role === "ADMIN") {
+        navigation.navigate("Admin");
+      } else {
+        navigation.navigate("Student");
+      }
     } else {
       setError("Invalid username or password");
     }
@@ -73,13 +78,13 @@ const Signin = ({ navigation }: any) => {
         <Text style={styles.containerHeadline}>Sign in</Text>
         <View className="w-full justify-center items-center p-4">
           <Text className="text-white text-lg text-left w-full">Username</Text>
-
           <TextInput
             onChangeText={(e) => setCredential({ ...credential, username: e })}
             style={styles.input}
             className="w-full "
           />
           <Text className="text-white text-lg text-left w-full">Password</Text>
+
           <View className="block justify-center items-center relative  w-full">
             <TextInput
               onChangeText={(e) =>
@@ -98,9 +103,16 @@ const Signin = ({ navigation }: any) => {
             </Pressable>
           </View>
           <Text style={styles.error}>{error}</Text>
-          <TouchableHighlight onPress={handleSubmit} style={styles.button}>
-            <Text style={styles.buttonText}>Submit</Text>
-          </TouchableHighlight>
+          <View className="my-2">
+            <TouchableHighlight
+              onPress={handleSubmit}
+              className="w-full border bg-white rounded-xl px-6 py-4 "
+            >
+              <Text className="text-center text-[#051c2e] font-bold w-full">
+                Submit
+              </Text>
+            </TouchableHighlight>
+          </View>
           <View className=" flex-row my-6 justify-center items-center flex">
             <Text className="text-white">Don't have an account?</Text>
             <Pressable onPress={() => navigation.navigate("Signup")}>

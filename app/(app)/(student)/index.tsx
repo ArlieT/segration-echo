@@ -1,47 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
-import { users } from "../../../constants/fakeusers";
-import UserBox from "../../../components/UserBox";
+import { StyleSheet, View } from "react-native";
 import Bin from "../../../components/bin/Bin";
 import Loading from "../../../components/Loading";
-import { onValue } from "firebase/database";
 import firebaseRef from "../../../firebase/ref";
 import BinModal, { ModalProps } from "../../../components/BinModal";
-import { Link, useRouter } from "expo-router";
 import { useAuth } from "../../../_store/authStore";
+import { MyProfile } from "../[user]";
+import { useObject } from "react-firebase-hooks/database";
 
-type TWeater = {
-  temperature: string;
-  humidity: string;
-};
-type TBin = {
+export type TBinScore = {
   plastic: string;
   can: string;
   paper: string;
 };
 
-export default function TabOneScreen() {
+export default function UserScreen() {
+  const { token: user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [weather, setWeather] = useState<TWeater>();
-  const [bin, setBin] = useState<TBin>();
-  const [binCount, setBinCount] = useState<TBin>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [info, setInfo] = useState<ModalProps>();
-
-  useEffect(() => {
-    onValue(firebaseRef("Bin"), (snapshot) => {
-      const data = snapshot.val();
-      setBin(data);
-    });
-    onValue(firebaseRef("BottleCount"), (snapshot) => {
-      const data = snapshot.val();
-      setBinCount(data);
-    });
-    onValue(firebaseRef("Weather"), (snapshot) => {
-      const data = snapshot.val();
-      setWeather(data);
-    });
-  }, []);
+  const [student, loading, error] = useObject(
+    firebaseRef(`users/STUDENT/${user?.username}`)
+  );
 
   useEffect(() => {
     /* mock loading */
@@ -52,9 +32,10 @@ export default function TabOneScreen() {
       setIsLoading(false);
     }, randomValue);
   }, []);
+
   return (
     <>
-      {isLoading ? (
+      {isLoading || loading ? (
         <Loading />
       ) : (
         <>
@@ -68,23 +49,17 @@ export default function TabOneScreen() {
               />
             )}
 
-            <View
-              style={styles.top3Container}
-              className="flex-[1.5] outline outline-red-500"
-            >
-              <Text className="mb-2 text-base">Top 3 most points</Text>
-              <ScrollView style={styles.scrollView}>
-                {users.slice(0, 3).map(({ username, scores }, index) => (
-                  <UserBox username={username} scores={scores} key={index} />
-                ))}
-              </ScrollView>
-            </View>
+            <MyProfile
+              username={user?.username}
+              percentage={student?.val()?.bin_score}
+              count={student?.val()?.bin_count}
+            />
 
-            <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-[0.8]">
+            <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between gap-x0 p-2 flex-[0.8]">
               <Bin
                 label="Plactic Bin"
-                percentage={bin?.plastic}
-                count={binCount?.plastic}
+                percentage={student?.val()?.bin_score?.plastic}
+                count={student?.val()?.bin_count?.plastic}
                 // color="#051c2e"
                 color="rgba(5, 28, 46, 0.9)"
                 setInfo={setInfo}
@@ -92,18 +67,17 @@ export default function TabOneScreen() {
               />
               <Bin
                 label="Paper Bin"
-                count={binCount?.paper}
-                percentage={bin?.paper}
+                count={student?.val()?.bin_count?.paper}
+                percentage={student?.val()?.bin_score?.paper}
                 // color="#051c2e"
                 color="rgba(5, 28, 46, 0.9)"
                 setInfo={setInfo}
                 setModal={setIsModalOpen}
               />
-              <Text></Text>
               <Bin
                 label="Can Bin"
-                count={binCount?.can}
-                percentage={bin?.can}
+                count={student?.val()?.bin_count?.can}
+                percentage={student?.val()?.bin_score?.can}
                 color="rgba(5, 28, 46, 0.9)"
                 setInfo={setInfo}
                 setModal={setIsModalOpen}
@@ -125,7 +99,7 @@ const styles = StyleSheet.create({
     height: "100%",
     padding: 5,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   header: {
     padding: 16,
@@ -135,7 +109,7 @@ const styles = StyleSheet.create({
     marginBottom: "10%",
     height: "12%",
     flexDirection: "column",
-    top: 20,
+    top: 20
   },
   boxCon: {
     flexDirection: "row",
@@ -145,7 +119,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 10,
     minHeight: 80,
-    gap: 10,
+    gap: 10
   },
   box: {
     backgroundColor: "rgba(5, 28, 46, 0.8)",
@@ -159,7 +133,7 @@ const styles = StyleSheet.create({
     height: "80%",
     maxWidth: 100,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   headerText: {
     bottom: "25%",
@@ -167,7 +141,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     textAlign: "left",
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 18
   },
   headerBackground: {
     backgroundColor: "#051c2e",
@@ -176,18 +150,18 @@ const styles = StyleSheet.create({
     bottom: -6,
     width: "90%",
     borderRadius: 16,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   headerTextWhite: {
     textAlign: "center",
     color: "white",
-    margin: "auto",
+    margin: "auto"
   },
   top3Container: {
     borderRadius: 16,
     backgroundColor: "#fbfbfb",
     height: "50%",
-    padding: 10,
+    padding: 10
   },
   top3Text: {
     color: "black",
@@ -196,18 +170,18 @@ const styles = StyleSheet.create({
     padding: 8,
     paddingLeft: 16,
     fontSize: 16,
-    fontWeight: "medium",
+    fontWeight: "medium"
   },
   scrollView: {
-    marginVertical: 2,
+    marginVertical: 2
   },
   contentContainer: {
     flex: 1,
-    alignItems: "center",
+    alignItems: "center"
   },
   containerHeadline: {
     fontSize: 24,
     fontWeight: "600",
-    padding: 20,
-  },
+    padding: 20
+  }
 });

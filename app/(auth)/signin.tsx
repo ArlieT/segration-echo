@@ -19,7 +19,7 @@ const Signin = () => {
   const [credential, setCredential] = useState<TCredential>({
     username: "",
     password: "",
-    role: "",
+    role: ""
   });
 
   const handleSubmit = async () => {
@@ -40,7 +40,7 @@ const Signin = () => {
         router.push("/");
         setCredential({
           username: "",
-          password: "",
+          password: ""
         });
       }, 1500);
     } else {
@@ -53,7 +53,7 @@ const Signin = () => {
     return () => {
       setCredential({
         username: "",
-        password: "",
+        password: ""
       });
     };
   }, []);
@@ -66,7 +66,7 @@ const Signin = () => {
           autoPlay
           style={{
             width: 100,
-            height: 100,
+            height: 100
           }}
           source={require("../../assets/animated/sign-in-lottie.json")}
         />
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#051c2e",
+    backgroundColor: "#051c2e"
   },
   contentContainer: {
     height: "100%",
@@ -129,13 +129,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     color: "white",
     justifyContent: "center",
-    width: "100%",
+    width: "100%"
   },
   containerHeadline: {
     fontSize: 24,
     fontWeight: "600",
     padding: 20,
-    color: "#fff",
+    color: "#fff"
   },
   input: {
     width: "100%",
@@ -149,12 +149,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     // backgroundColor: "rgba(151, 151, 151, 0.25)",
     backgroundColor: "#051c2e",
-    color: "#fff",
+    color: "#fff"
   },
   error: {
     color: "red",
     alignSelf: "center",
-    fontSize: 18,
+    fontSize: 18
   },
   button: {
     backgroundColor: "white",
@@ -163,10 +163,10 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingHorizontal: 24,
     alignItems: "center",
-    width: "100%",
+    width: "100%"
   },
   buttonText: {
     fontWeight: "600",
-    color: "black",
-  },
+    color: "black"
+  }
 });

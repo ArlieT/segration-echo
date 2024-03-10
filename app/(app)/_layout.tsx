@@ -1,19 +1,19 @@
-import { Pressable, Text, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 import { useAuth } from "../../_store/authStore";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import CustomDrawerContent from "../../components/CustomDrawer";
-import TabOneScreen from "./(student)";
-import { Link, useRouter } from "expo-router";
-import { FontAwesome } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import InformationTab from "./modal";
 import { StatusBar } from "expo-status-bar";
 import Signin from "./signin";
 import Signup from "./signup";
+import UserScreen from "./(student)";
+import AdminScreen from "./(tabs)";
+import Users from "./(tabs)/users";
+import Student from "./[user]";
 
 function AppEntry({ navigation }: any) {
   const colorScheme = useColorScheme();
-  const { token } = useAuth();
-  // const ROLE = token?.role?.toLocaleUpperCase()
 
   const Drawer = createDrawerNavigator();
 
@@ -22,15 +22,20 @@ function AppEntry({ navigation }: any) {
     router.replace("/(app)/modal");
   };
 
+  const { signOut, signIn, status, role } = useAuth();
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       detachInactiveScreens
       screenOptions={{ drawerStatusBarAnimation: "none" }}
     >
-      <Drawer.Screen name="Admin" component={TabOneScreen} />
-      <Drawer.Screen name="Student" component={TabOneScreen} />
-      <Drawer.Screen name="Modal" component={InformationTab} />
+      <Drawer.Screen name="Admin" component={AdminScreen} />
+      <Drawer.Screen name="Student" component={UserScreen} />
+      <Drawer.Screen name="Information" component={InformationTab} />
+      <Drawer.Screen name="Students" component={Users} />
+      <Drawer.Screen name="User" component={Student as any} />
+      {/* empty label / label == invisible */}
       <Drawer.Screen
         name="Signin"
         options={{ title: "", headerShown: false }}
