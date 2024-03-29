@@ -5,7 +5,7 @@ import BottomSheet, {
   TouchableHighlight,
 } from "@gorhom/bottom-sheet";
 import { ScrollView } from "react-native-gesture-handler";
-import { useAuth } from "../../_store/authStore";
+import { useAuth } from "../../_store/useAuthStore";
 import { TCredential } from "../../_store/_utils/auth";
 import { FontAwesome } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";

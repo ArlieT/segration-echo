@@ -2,7 +2,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs, useLocalSearchParams } from "expo-router";
 import { Pressable, StyleSheet, View, useColorScheme } from "react-native";
 import Colors from "../../../constants/Colors";
-import { hydrateAuth } from "../../../_store/authStore";
+import { hydrateAuth } from "../../../_store/useAuthStore";
 
 export function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];

@@ -1,22 +1,19 @@
 import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
-import BottomSheetSignIn from "../../components/BottomSheetSignIn";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableHighlight } from "react-native-gesture-handler";
-import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
-import { useAuth } from "../../_store/authStore";
+import { useAuth } from "../../_store/useAuthStore";
 import { TCredential } from "../../_store/_utils/auth";
 import AnimatedLottieView from "lottie-react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
-import { useRouter } from "expo-router";
-import { users } from "../../constants/fakeusers";
-import mockUsers from "../../_constant/user";
+import { useList } from "react-firebase-hooks/database";
+import firebaseRef from "../../firebase/ref";
+import { DataSnapshot } from "firebase/database";
 
 const Signin = ({ navigation }: any) => {
-  const router = useRouter();
   const { signIn } = useAuth();
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [credential, setCredential] = useState<TCredential>({
     username: "",
@@ -24,32 +21,56 @@ const Signin = ({ navigation }: any) => {
     role: "",
   });
 
-  const handleSubmit = async () => {
-    const { username, password } = credential;
-    if (username.length < 4) {
-      setError("Username must be at least 4 characters long");
-      return;
-    }
-    if (password.length < 4) {
-      setError("Password must be at least 4 characters long");
-      return;
-    }
-    //TODO REPLACE WITH ACUTLA USER
+  const [adminSnapshot] = useList(firebaseRef("users/ADMIN"));
+  const [studentSnapshot] = useList(firebaseRef("users/STUDENT"));
+  const [users, setUsers] = useState<DataSnapshot[] | undefined>([]);
 
-    const user = mockUsers.filter(
-      (user) => user.username === username && user.password === password
-    )[0];
+  useEffect(() => {
+    setUsers([...(adminSnapshot || []), ...(studentSnapshot || [])]);
+  }, [studentSnapshot, adminSnapshot]);
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    const { username, password } = credential;
+
+    // Validate username and password length
+    if (username.length <= 3) {
+      setError("Username must be at least 4 characters long");
+      setIsSubmitting(false);
+      return;
+    }
+    if (password.length <= 3) {
+      setError("Password must be at least 4 characters long");
+      setIsSubmitting(false);
+      return;
+    }
+    // console.log("test__ ", users);
+
+    // console.log("users: ", users?.[0]?.val()?.username);
+
+    // Check if users data is available
+    console.log({ credential });
+
+    const user = users?.find(
+      (user) =>
+        user?.val()?.username === username && user?.val()?.password === password
+    );
+
+    console.log({ users });
+
+    signIn(user?.val());
 
     if (user) {
-      console.log("user found ", user);
-      signIn({ ...user });
-      if (user.role === "ADMIN") {
-        navigation.navigate("Admin");
-      } else {
-        navigation.navigate("Student");
-      }
+      setTimeout(() => {
+        if (user?.val()?.role === "ADMIN") {
+          navigation.navigate("Admin");
+        } else if (user?.val()?.role === "STUDENT") {
+          navigation.navigate("Student");
+        }
+      }, 1200);
     } else {
       setError("Invalid username or password");
+      setIsSubmitting(false);
     }
   };
 
@@ -63,6 +84,14 @@ const Signin = ({ navigation }: any) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    }
+  }, [error]);
+
   return (
     <View style={styles.container} className="border">
       <StatusBar style="light" />
@@ -75,10 +104,12 @@ const Signin = ({ navigation }: any) => {
           }}
           source={require("../../assets/animated/sign-in-lottie.json")}
         />
+
         <Text style={styles.containerHeadline}>Sign in</Text>
         <View className="w-full justify-center items-center p-4">
           <Text className="text-white text-lg text-left w-full">Username</Text>
           <TextInput
+            value={credential.username}
             onChangeText={(e) => setCredential({ ...credential, username: e })}
             style={styles.input}
             className="w-full "
@@ -87,6 +118,7 @@ const Signin = ({ navigation }: any) => {
 
           <View className="block justify-center items-center relative  w-full">
             <TextInput
+              value={credential.password}
               onChangeText={(e) =>
                 setCredential({ ...credential, password: e })
               }
@@ -109,14 +141,16 @@ const Signin = ({ navigation }: any) => {
               className="w-full border bg-white rounded-xl px-6 py-4 "
             >
               <Text className="text-center text-[#051c2e] font-bold w-full">
-                Submit
+                {isSubmitting ? "Submitting..." : "Sign in"}
               </Text>
             </TouchableHighlight>
           </View>
           <View className=" flex-row my-6 justify-center items-center flex">
-            <Text className="text-white">Don't have an account?</Text>
+            <Text className="text-white">Don't have an account?&nbsp; </Text>
             <Pressable onPress={() => navigation.navigate("Signup")}>
-              <Text className="text-blue-500">&nbsp; Sign up</Text>
+              <Text className="text-blue-500 underline underline-offset-4">
+                Sign up
+              </Text>
             </Pressable>
           </View>
         </View>

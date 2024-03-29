@@ -11,12 +11,6 @@ export default function Users({}) {
   const [studentList, loading, error] = useList(firebaseRef(`users/STUDENT`));
   return (
     <SafeAreaView style={styles.container} className="">
-      {/* <View className="bg-white p-4 w-full">
-        <Text className="text-black text-lg text-left w-full text-md">
-          Students
-        </Text>
-      </View> */}
-
       <ScrollView
         className="space-y-2 w-full p-2 flex-1 mt-4"
         contentContainerStyle={{

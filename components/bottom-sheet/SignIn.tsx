@@ -1,7 +1,7 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
-import { useAuth } from "../../_store/authStore";
+import { useAuth } from "../../_store/useAuthStore";
 import { TCredential } from "../../_store/_utils/auth";
 import { FontAwesome } from "@expo/vector-icons";
 import { TouchableHighlight } from "react-native-gesture-handler";

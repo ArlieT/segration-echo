@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
 } from "react";
 import { StyleSheet, Text, View, ScrollView, Button } from "react-native";
 import UserBox from "../../../components/UserBox";
@@ -16,12 +16,9 @@ import { TCredential } from "../../../_store/_utils/auth";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import useBottomSheetController from "../../../_store/useBottomSheet";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { FontAwesome } from "@expo/vector-icons";
-import { users as Users } from "../../../constants/fakeusers";
 import { useList } from "react-firebase-hooks/database";
 import Weather from "../../../components/Weather";
 import { useNavigation } from "expo-router/src/useNavigation";
-import { NavigationProp } from "@react-navigation/native";
 
 type TWeater = {
   temperature: string;
@@ -47,7 +44,6 @@ export default function AdminScreen() {
   useEffect(() => {
     onValue(firebaseRef("Bin"), (snapshot) => {
       const data = snapshot.val();
-      console.log("btin ", data);
       setBin(data);
     });
     onValue(firebaseRef("BottleCount"), (snapshot) => {
@@ -56,24 +52,16 @@ export default function AdminScreen() {
     });
     onValue(firebaseRef("Weather"), (snapshot) => {
       const data = snapshot.val();
-      console.log("wetheader ", data);
       setWeather(data);
     });
 
     onValue(firebaseRef("users"), (snapshot) => {
       const data = snapshot.val();
       setUsers(data);
-      console.log("users ", data);
     });
   }, []);
 
   const [studentList, loading, error] = useList(firebaseRef(`users/STUDENT`));
-
-  useEffect(() => {
-    studentList?.map((item, id) =>
-      console.log("student ", item.val()?.username)
-    );
-  }, [users, studentList]);
 
   useEffect(() => {
     /* mock loading */
@@ -85,7 +73,6 @@ export default function AdminScreen() {
     }, randomValue);
   }, []);
 
-  const snapPoints = useMemo(() => ["80%"], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -97,8 +84,6 @@ export default function AdminScreen() {
     ),
     []
   );
-
-  const { action } = useBottomSheetController();
 
   const handleOpenPress = () => bottomSheetRef.current?.expand();
   const handleClosePress = () => bottomSheetRef.current?.close();
@@ -194,7 +179,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingVertical: 15,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   header: {
     padding: 16,
@@ -204,7 +189,7 @@ const styles = StyleSheet.create({
     marginBottom: "10%",
     height: "12%",
     flexDirection: "column",
-    top: 20
+    top: 20,
   },
   boxCon: {
     flexDirection: "row",
@@ -214,7 +199,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 10,
     minHeight: 80,
-    gap: 10
+    gap: 10,
   },
   box: {
     backgroundColor: "rgba(5, 28, 46, 0.8)",
@@ -228,7 +213,7 @@ const styles = StyleSheet.create({
     height: "80%",
     maxWidth: 100,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   headerText: {
     bottom: "25%",
@@ -236,7 +221,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     textAlign: "left",
     fontWeight: "bold",
-    fontSize: 18
+    fontSize: 18,
   },
   headerBackground: {
     backgroundColor: "#051c2e",
@@ -245,18 +230,18 @@ const styles = StyleSheet.create({
     bottom: -6,
     width: "90%",
     borderRadius: 16,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   headerTextWhite: {
     textAlign: "center",
     color: "white",
-    margin: "auto"
+    margin: "auto",
   },
   top3Container: {
     borderRadius: 16,
     backgroundColor: "#fbfbfb",
     height: "50%",
-    padding: 10
+    padding: 10,
   },
   top3Text: {
     color: "black",
@@ -265,21 +250,21 @@ const styles = StyleSheet.create({
     padding: 8,
     paddingLeft: 16,
     fontSize: 16,
-    fontWeight: "medium"
+    fontWeight: "medium",
   },
   scrollView: {
-    marginVertical: 2
+    marginVertical: 2,
   },
   contentContainer: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
 
   containerHeadline: {
     fontSize: 24,
     fontWeight: "600",
-    padding: 20
-  }
+    padding: 20,
+  },
 });
 
 // <BottomSheet

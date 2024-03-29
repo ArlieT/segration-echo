@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
   withSpring,
-  useAnimatedStyle
+  useAnimatedStyle,
 } from "react-native-reanimated";
 
 const Bin = ({
@@ -12,7 +12,7 @@ const Bin = ({
   count,
   color,
   setModal,
-  setInfo
+  setInfo,
 }: {
   color: string;
   percentage?: string;
@@ -26,7 +26,6 @@ const Bin = ({
 
   useEffect(() => {
     const percentageParsed = Number(percentage);
-    console.log({ percentageParsed });
     setTimeout(() => {
       if (percentageParsed === 1) {
         setLocalPercentage(30);
@@ -44,7 +43,7 @@ const Bin = ({
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      height: `${height.value}%`
+      height: `${height.value}%`,
     };
   });
 
@@ -80,9 +79,9 @@ const Bin = ({
                 bottom: 0,
                 borderWidth: 1,
                 backgroundColor: color,
-                width: "100%"
+                width: "100%",
               },
-              animatedStyle
+              animatedStyle,
             ]}
           />
         </TouchableOpacity>
@@ -100,13 +99,13 @@ const styles = StyleSheet.create({
     width: "95%",
     borderRadius: 8,
     height: "100%",
-    textAlign: "center"
+    textAlign: "center",
   },
   label: {
     fontWeight: "bold",
     textAlign: "center",
     width: "100%",
-    paddingVertical: 8
+    paddingVertical: 8,
   },
   relativeContainer: {
     position: "relative",
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     textAlign: "center",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   absoluteContainer: {
     position: "absolute",
@@ -126,19 +125,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 4,
     borderRadius: 4,
-    zIndex: 20
+    zIndex: 20,
   },
   percentageText: {
     position: "relative",
     zIndex: 10,
     color: "black",
-    textAlign: "left"
+    textAlign: "left",
   },
   bin: {
     height: 5,
     maxWidth: "100%",
-    borderRadius: 4
-  }
+    borderRadius: 4,
+  },
 });
 
 export default Bin;

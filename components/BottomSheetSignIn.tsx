@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { useAuth } from "../_store/authStore";
+import { useAuth } from "../_store/useAuthStore";
 import SignIn from "./bottom-sheet/SignIn";
 import SignUp from "./bottom-sheet/Signup";
 import { StatusBar } from "expo-status-bar";
@@ -10,7 +10,6 @@ export default function BottomSheetSignIn() {
   const [bottomSheet, setBottomSheet] = useState("signin");
 
   const handleBottomSheet = (bottomSheet: string) => {
-    console.log(bottomSheet);
     setBottomSheet(bottomSheet);
   };
 

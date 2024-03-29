@@ -1,23 +1,12 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Link, Redirect, Slot, SplashScreen, Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
+import { Slot, SplashScreen } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { Button, Pressable, Text, View, useColorScheme } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import AuthProvider from "../components/AuthProvider";
-import { Drawer } from "expo-router/drawer";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "../_store/authStore";
-import BottomSheet, {
-  BottomSheetBackdrop,
-  useBottomSheet,
-} from "@gorhom/bottom-sheet";
-import useBottomSheetController from "../_store/useBottomSheet";
+import BottomSheet from "@gorhom/bottom-sheet";
+import useBottomSheetGlobal from "../_store/useBottomSheetGloba";
+import { TabBarIcon } from "./(app)/(student)/_layout";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -54,54 +43,66 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-  // const ROLE = token?.role?.toLocaleUpperCase()
-  const snapPoints = useMemo(() => ["50%"], []);
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        {...props}
-      />
-    ),
-    []
-  );
+  const { bottomSheetRef, snapeIndex, setBottomSheet } = useBottomSheetGlobal();
+  const sheetRef2 = useRef<BottomSheet>(null);
 
-  const { setAction, setActionClose } = useBottomSheetController();
-  const handleOpenPress = () => bottomSheetRef.current?.expand();
-  const handleClosePress = () => bottomSheetRef.current?.close();
-  const snapeToIndex = (index: number) =>
-    bottomSheetRef.current?.snapToIndex(0);
-  useEffect(() => {
-    setActionClose(handleOpenPress);
-    setAction(snapeToIndex);
+  const snapPoints = useMemo(() => ["25", "50%", "90"], []);
+
+  const handleSnapPress = useCallback((index: number) => {
+    sheetRef2?.current?.snapToIndex(index);
   }, []);
+
+  useEffect(() => {
+    setBottomSheet(sheetRef2);
+    handleSnapPress(snapeIndex);
+
+    console.log({ snapeIndex });
+  }, [snapeIndex]);
 
   return (
     <AuthProvider>
       <Slot />
-      {/* <Button title="Open" onPress={() => snapToIndex(0)} /> */}
+
+      {/* BOTTOM SHEET */}
       <BottomSheet
-        ref={bottomSheetRef}
-        index={0}
-        snapPoints={snapPoints}
-        enablePanDownToClose={true}
-        handleIndicatorStyle={{ backgroundColor: "#fff" }}
-        backdropComponent={renderBackdrop}
-        containerStyle={{
-          zIndex: 9999,
-          borderWidth: 1,
-        }}
+        ref={sheetRef2}
         backgroundStyle={{ backgroundColor: "#051c2e" }}
-        containerHeight={{ value: 1000 }}
+        handleIndicatorStyle={{
+          backgroundColor: "white",
+        }}
+        enablePanDownToClose
+        snapPoints={snapPoints}
       >
-        <View className="border">
-          <Text className="text-white">Awesome Bottom Sheet 🎉</Text>
-          <Button title="Close" onPress={handleClosePress} />
+        <View style={styles.contentContainer} className=" pt-10">
+          <View className="rounded-md w-4/5 flex-row p-4 justify-center items-center bg-white">
+            <Text className="text-lg font-semibold">Score saved </Text>
+            <Text>
+              <TabBarIcon name="check-circle" color="black" />,
+            </Text>
+          </View>
         </View>
       </BottomSheet>
     </AuthProvider>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: "grey",
+  },
+  textInput: {
+    alignSelf: "stretch",
+    marginHorizontal: 12,
+    marginBottom: 12,
+    padding: 12,
+    borderRadius: 12,
+    backgroundColor: "grey",
+    color: "white",
+    textAlign: "center",
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
+});

@@ -4,7 +4,7 @@ import Bin from "../../../components/bin/Bin";
 import Loading from "../../../components/Loading";
 import firebaseRef from "../../../firebase/ref";
 import BinModal, { ModalProps } from "../../../components/BinModal";
-import { useAuth } from "../../../_store/authStore";
+import { useAuth } from "../../../_store/useAuthStore";
 import { MyProfile } from "../[user]";
 import { useObject } from "react-firebase-hooks/database";
 
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     height: "100%",
     padding: 5,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   header: {
     padding: 16,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginBottom: "10%",
     height: "12%",
     flexDirection: "column",
-    top: 20
+    top: 20,
   },
   boxCon: {
     flexDirection: "row",
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 10,
     minHeight: 80,
-    gap: 10
+    gap: 10,
   },
   box: {
     backgroundColor: "rgba(5, 28, 46, 0.8)",
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     height: "80%",
     maxWidth: 100,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   headerText: {
     bottom: "25%",
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     textAlign: "left",
     fontWeight: "bold",
-    fontSize: 18
+    fontSize: 18,
   },
   headerBackground: {
     backgroundColor: "#051c2e",
@@ -150,18 +150,18 @@ const styles = StyleSheet.create({
     bottom: -6,
     width: "90%",
     borderRadius: 16,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   headerTextWhite: {
     textAlign: "center",
     color: "white",
-    margin: "auto"
+    margin: "auto",
   },
   top3Container: {
     borderRadius: 16,
     backgroundColor: "#fbfbfb",
     height: "50%",
-    padding: 10
+    padding: 10,
   },
   top3Text: {
     color: "black",
@@ -170,18 +170,18 @@ const styles = StyleSheet.create({
     padding: 8,
     paddingLeft: 16,
     fontSize: 16,
-    fontWeight: "medium"
+    fontWeight: "medium",
   },
   scrollView: {
-    marginVertical: 2
+    marginVertical: 2,
   },
   contentContainer: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   containerHeadline: {
     fontSize: 24,
     fontWeight: "600",
-    padding: 20
-  }
+    padding: 20,
+  },
 });

@@ -1,28 +1,26 @@
 import React from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { useAuth } from "../_store/authStore";
+import { useAuth } from "../_store/useAuthStore";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 const CustomDrawerContent = ({ navigation }: any) => {
   const { signOut, signIn, status, role } = useAuth();
-  const router = useRouter();
+
   const handleLogout = async () => {
-    console.log("Button Clicked");
     await signOut();
     navigation.closeDrawer();
     navigation.navigate("Signin");
-    // navigation.navigate("/(auth)/signin");
   };
+
   const handleLogin = async () => {
-    console.log("Button Clicked");
     signIn({ username: "test", password: "test", role: "ADMIN" });
     // await signOut();
     navigation.closeDrawer(); // Close the drawer if needed
     // navigation.navigate("/(auth)/signin");
   };
-  console.log({ role });
+
   return (
     <DrawerContentScrollView>
       <StatusBar style="dark" />
@@ -60,7 +58,7 @@ const CustomDrawerContent = ({ navigation }: any) => {
         >
           <View
             style={{
-              padding: 16
+              padding: 16,
             }}
           >
             <Text className="text-white font-bold text-center">Logout</Text>

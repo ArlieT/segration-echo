@@ -1,17 +1,18 @@
 import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../_store/authStore";
 import { TCredential } from "../../_store/_utils/auth";
 import { FontAwesome } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
-import { useRouter } from "expo-router";
 import SelectDropdown from "react-native-select-dropdown";
 import { TouchableHighlight } from "react-native-gesture-handler";
+import firebaseRef from "../../firebase/ref";
+import { set } from "firebase/database";
 
-const Signup = ({ navigation }) => {
-  const router = useRouter();
-  const { signIn } = useAuth();
-  const [error, setError] = useState("");
+const Signup = ({ navigation }: any) => {
+  const [error, setError] = useState({
+    message: "",
+    status: "error",
+  });
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [credential, setCredential] = useState<TCredential>({
     username: "",
@@ -19,40 +20,41 @@ const Signup = ({ navigation }) => {
     role: "",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async () => {
-    const { username, password, role } = credential;
-    if (username.length < 4) {
-      setError("Username must be at least 4 characters long");
-      return;
-    }
+    const { username, password, role = "STUDENT" } = credential;
+
     if (password.length < 4) {
-      setError("Password must be at least 4 characters long");
+      setError({
+        message: "Password must be at least 4 characters long",
+        status: "error",
+      });
       return;
     }
 
     if (credential) {
-      setTimeout(() => {
-        //signIn();//SIGNUP
-        setCredential({
-          username: "",
-          password: "",
-          role: "",
+      setIsSubmitting(true);
+      setTimeout(async () => {
+        await set(firebaseRef(`users/${role}/${username}`), {
+          username,
+          password,
+          role,
         });
-        // handleBottomSheet("signin");
-      }, 1500);
+        setError({
+          message: "User created successfully",
+          status: "success",
+        });
+        setIsSubmitting(false);
+      }, 2000);
     } else {
-      setError("Invalid username or password");
+      setError({
+        message: "Invalid username or password",
+        status: "error",
+      });
     }
   };
 
-  useEffect(() => {
-    return () => {
-      setCredential({
-        username: "",
-        password: "",
-      });
-    };
-  }, []);
   useEffect(() => {
     //RESET CREDENTIAL
     return () => {
@@ -117,7 +119,7 @@ const Signup = ({ navigation }) => {
             onSelect={(selectedItem, index) => {
               setCredential({
                 ...credential,
-                role: selectedItem.toString().toLowerCase(),
+                role: selectedItem.toString().toUpperCase(),
               });
             }}
             buttonTextAfterSelection={(selectedItem, index) => {
@@ -131,9 +133,16 @@ const Signup = ({ navigation }) => {
               return item;
             }}
           />
-          <Text style={styles.error}>{error}</Text>
+          <Text
+            className="mt-4"
+            style={error.status === "success" ? styles.success : styles.error}
+          >
+            {error.message}
+          </Text>
           <TouchableHighlight onPress={handleSubmit} style={styles.button}>
-            <Text style={styles.buttonText}>Submit</Text>
+            <Text style={styles.buttonText}>
+              {isSubmitting ? "Submitting..." : "Sign up"}
+            </Text>
           </TouchableHighlight>
           <View className=" flex-row my-6 justify-center items-center flex">
             <Text className="text-white">Already have an account?</Text>
@@ -191,6 +200,11 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
+    alignSelf: "center",
+    fontSize: 18,
+  },
+  success: {
+    color: "green",
     alignSelf: "center",
     fontSize: 18,
   },

@@ -1,10 +1,9 @@
 import { useColorScheme } from "react-native";
-import { useAuth } from "../../_store/authStore";
+import { useAuth } from "../../_store/useAuthStore";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import CustomDrawerContent from "../../components/CustomDrawer";
 import { useRouter } from "expo-router";
 import InformationTab from "./modal";
-import { StatusBar } from "expo-status-bar";
 import Signin from "./signin";
 import Signup from "./signup";
 import UserScreen from "./(student)";
@@ -13,16 +12,7 @@ import Users from "./(tabs)/users";
 import Student from "./[user]";
 
 function AppEntry({ navigation }: any) {
-  const colorScheme = useColorScheme();
-
   const Drawer = createDrawerNavigator();
-
-  const router = useRouter();
-  const handleModal = () => {
-    router.replace("/(app)/modal");
-  };
-
-  const { signOut, signIn, status, role } = useAuth();
 
   return (
     <Drawer.Navigator
@@ -47,6 +37,7 @@ function AppEntry({ navigation }: any) {
         component={Signup}
       />
     </Drawer.Navigator>
+
     //DEFAULT DRAWER
     // <Drawer
     //   detachInactiveScreens

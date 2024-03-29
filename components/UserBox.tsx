@@ -14,7 +14,6 @@ const UserBox = ({
   ...props
 }: TUsers & { className?: string }) => {
   const navigation = useNavigation();
-  console.log(bin_score);
   return (
     <View
       style={{ elevation: 20 }}
@@ -32,10 +31,10 @@ const UserBox = ({
       <Score label="Plastic" score={bin_score?.plastic} />
       <Score label="Paper" score={bin_score?.paper} />
 
-      <View className="h-4 absolute top-4 right-4 flex justify-center items-center px-2 ">
+      <View className="h-4 absolute top-4 right-2 flex justify-center items-center px-2 ">
         <TouchableOpacity
           onPress={() => navigation.navigate("User", { username })}
-          className="  hover:bg-red-500  group-isolate gap-x-1 flex-row"
+          className="p-3 hover:bg-red-500  group-isolate gap-x-1 flex-row"
         >
           <View className="group-isolate-hover:bg-red-500 w-1.5 h-1.5 rounded-full bg-gray-800"></View>
           <View className="w-1.5 h-1.5 rounded-full bg-gray-800"></View>
