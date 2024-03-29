@@ -27,11 +27,11 @@ const Bin = ({
   useEffect(() => {
     const percentageParsed = Number(percentage);
     setTimeout(() => {
-      if (percentageParsed === 1) {
+      if (percentageParsed == 1) {
         setLocalPercentage(30);
-      } else if (percentageParsed === 2) {
+      } else if (percentageParsed == 2) {
         setLocalPercentage(50);
-      } else if (percentageParsed === 3) {
+      } else if (percentageParsed == 3) {
         setLocalPercentage(100);
       }
     }, 1000);

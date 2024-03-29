@@ -1,20 +1,11 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { StyleSheet, Text, View, ScrollView, Button } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, ScrollView, BackHandler } from "react-native";
 import UserBox from "../../../components/UserBox";
 import Bin from "../../../components/bin/Bin";
 import Loading from "../../../components/Loading";
 import { onValue } from "firebase/database";
 import firebaseRef from "../../../firebase/ref";
 import BinModal, { ModalProps } from "../../../components/BinModal";
-import { TCredential } from "../../../_store/_utils/auth";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import useBottomSheetController from "../../../_store/useBottomSheet";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useList } from "react-firebase-hooks/database";
 import Weather from "../../../components/Weather";
@@ -24,7 +15,7 @@ type TWeater = {
   temperature: string;
   humidity: string;
 };
-type TBin = {
+export type TBin = {
   plastic: string;
   can: string;
   paper: string;
@@ -37,7 +28,6 @@ export default function AdminScreen() {
   const [binCount, setBinCount] = useState<TBin>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [info, setInfo] = useState<ModalProps>();
-  const [users, setUsers] = useState<TCredential[]>();
 
   const navigation = useNavigation();
 
@@ -54,11 +44,6 @@ export default function AdminScreen() {
       const data = snapshot.val();
       setWeather(data);
     });
-
-    onValue(firebaseRef("users"), (snapshot) => {
-      const data = snapshot.val();
-      setUsers(data);
-    });
   }, []);
 
   const [studentList, loading, error] = useList(firebaseRef(`users/STUDENT`));
@@ -73,22 +58,44 @@ export default function AdminScreen() {
     }, randomValue);
   }, []);
 
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        {...props}
-      />
-    ),
-    []
-  );
+  const studentArray: any[] = [];
+  studentList?.forEach((childSnapshot) => {
+    studentArray.push({
+      key: childSnapshot.key,
+      ...childSnapshot.val(),
+    });
+  });
 
-  const handleOpenPress = () => bottomSheetRef.current?.expand();
-  const handleClosePress = () => bottomSheetRef.current?.close();
-  const snapeToIndex = (index: number) =>
-    bottomSheetRef.current?.snapToIndex(index);
+  const sortedStudentArray = studentArray?.sort((a, b) => {
+    const totalScoreA =
+      (a?.bin_score?.can || 0) +
+      (a?.bin_score?.plastic || 0) +
+      (a?.bin_score?.paper || 0);
+    const totalScoreB =
+      (b?.bin_score?.can || 0) +
+      (b?.bin_score?.plastic || 0) +
+      (b?.bin_score?.paper || 0);
+
+    return totalScoreB - totalScoreA;
+  });
+
+  const { navigate } = useNavigation();
+  useEffect(() => {
+    const backAction = () => {
+      // Handle custom back button behavior here
+      // For example, prevent going back to the previous screen:
+      // navigation.navigate('Home'); // Navigate to a specific screen
+      navigate("Admin" as never);
+      return true; // Prevent default behavior (going back)
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <>
@@ -120,14 +127,16 @@ export default function AdminScreen() {
                 <TouchableOpacity
                   onPress={() => navigation.navigate("Students" as never)}
                 >
-                  <Text className="mb-2 text-base">See all students</Text>
+                  <Text className="mb-2 text-base underline underline-offset-1">
+                    See all students
+                  </Text>
                 </TouchableOpacity>
               </View>
               <ScrollView style={styles.scrollView}>
-                {studentList?.slice(0, 3).map((v, index) => (
+                {sortedStudentArray?.slice(0, 3)?.map((v, index) => (
                   <UserBox
-                    username={v.val()?.username}
-                    bin_score={v.val()?.bin_score}
+                    username={v?.username}
+                    bin_score={v?.bin_score}
                     key={index}
                   />
                 ))}

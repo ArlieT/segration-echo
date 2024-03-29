@@ -58,6 +58,7 @@ const Signup = ({ navigation }: any) => {
   useEffect(() => {
     //RESET CREDENTIAL
     return () => {
+      setIsSubmitting(false);
       setCredential({
         username: "",
         password: "",

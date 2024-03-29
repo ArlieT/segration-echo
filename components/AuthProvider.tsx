@@ -23,9 +23,9 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <AuthContext.Provider value={status}>
-      <Pressable onPress={signOut} className="p-10">
+      {/* <Pressable onPress={signOut} className="p-10">
         <Text> logout</Text>
-      </Pressable>
+      </Pressable> */}
 
       {children}
     </AuthContext.Provider>

@@ -1,3 +1,4 @@
+import bottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet";
 import BottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet";
 import { BottomSheetMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { RefObject } from "react";
@@ -11,7 +12,7 @@ type States = {
 };
 const useBottomSheetGlobal = create<States>((set) => ({
   bottomSheetRef: null,
-  snapeIndex: 0,
+  snapeIndex: -1,
   setSnapeIndex: (index: number) => set({ snapeIndex: index }),
   setBottomSheet: (bottomSheetRef: RefObject<BottomSheetMethods>) =>
     set({ bottomSheetRef }),

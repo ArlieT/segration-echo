@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { BackHandler, StyleSheet, View } from "react-native";
 import Bin from "../../../components/bin/Bin";
 import Loading from "../../../components/Loading";
 import firebaseRef from "../../../firebase/ref";
@@ -7,6 +7,9 @@ import BinModal, { ModalProps } from "../../../components/BinModal";
 import { useAuth } from "../../../_store/useAuthStore";
 import { MyProfile } from "../[user]";
 import { useObject } from "react-firebase-hooks/database";
+import { useNavigation } from "expo-router";
+import { onValue } from "firebase/database";
+import { TBin } from "../(tabs)";
 
 export type TBinScore = {
   plastic: string;
@@ -19,6 +22,8 @@ export default function UserScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [info, setInfo] = useState<ModalProps>();
+  const [bin, setBin] = useState<TBin>();
+  const [binCount, setBinCount] = useState<TBin>();
   const [student, loading, error] = useObject(
     firebaseRef(`users/STUDENT/${user?.username}`)
   );
@@ -31,6 +36,36 @@ export default function UserScreen() {
     setTimeout(() => {
       setIsLoading(false);
     }, randomValue);
+  }, []);
+
+  useEffect(() => {
+    onValue(firebaseRef("Bin"), (snapshot) => {
+      const data = snapshot.val();
+      setBin(data);
+    });
+    onValue(firebaseRef("BottleCount"), (snapshot) => {
+      const data = snapshot.val();
+      setBinCount(data);
+    });
+  }, []);
+
+  const { navigate } = useNavigation();
+
+  useEffect(() => {
+    const backAction = () => {
+      // Handle custom back button behavior here
+      // For example, prevent going back to the previous screen:
+      // navigation.navigate('Home'); // Navigate to a specific screen
+      navigate("Student" as never);
+      return true; // Prevent default behavior (going back)
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
   }, []);
 
   return (
@@ -54,8 +89,35 @@ export default function UserScreen() {
               percentage={student?.val()?.bin_score}
               count={student?.val()?.bin_count}
             />
-
-            <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between gap-x0 p-2 flex-[0.8]">
+            <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-1">
+              <Bin
+                label="Plactic Bin"
+                percentage={bin?.plastic}
+                count={binCount?.plastic}
+                // color="#051c2e"
+                color="rgba(5, 28, 46, 0.9)"
+                setInfo={setInfo}
+                setModal={setIsModalOpen}
+              />
+              <Bin
+                label="Paper Bin"
+                count={binCount?.paper}
+                percentage={bin?.paper}
+                // color="#051c2e"
+                color="rgba(5, 28, 46, 0.9)"
+                setInfo={setInfo}
+                setModal={setIsModalOpen}
+              />
+              <Bin
+                label="Can Bin"
+                count={binCount?.can}
+                percentage={bin?.can}
+                color="rgba(5, 28, 46, 0.9)"
+                setInfo={setInfo}
+                setModal={setIsModalOpen}
+              />
+            </View>
+            {/* <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between gap-x0 p-2 flex-[1]">
               <Bin
                 label="Plactic Bin"
                 percentage={student?.val()?.bin_score?.plastic}
@@ -82,7 +144,7 @@ export default function UserScreen() {
                 setInfo={setInfo}
                 setModal={setIsModalOpen}
               />
-            </View>
+            </View> */}
           </View>
         </>
       )}

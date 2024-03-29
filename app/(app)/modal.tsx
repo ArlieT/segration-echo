@@ -8,33 +8,49 @@ const InformationTab = () => {
   const { signOut, status } = useAuth();
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          backgroundColor: "#051c2e",
-          alignItems: "baseline",
-          padding: 10,
-          borderRadius: 12,
-        }}
-      >
-        <Text style={styles.title}>Eco Arcade Information</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.title}>Welcome to Eco Arcade</Text>
       </View>
       <View style={styles.separator} />
 
-      <Text style={styles.paragraph}>
-        Welcome to the Arcade eco bin monitoring App! This app allows you to
-        keep track of different types of bins, including paper, plastic, and can
-        bins. Additionally, it provides information on temperature and humidity
-        levels.
-        {"\n\n"}- **Bin Types:** - Paper Bin - Plastic Bin - Can Bin
-        {"\n\n"}- **Environmental Parameters:** - Temperature - Humidity
-        {"\n\n"}
-        Use this information to monitor the status of your bins and ensure
-        proper waste management.
-        {"\n\n"}**Key Features:**
-        {"\n"}- Real-time monitoring of bin occupancy
-        {"\n"}- Environmental conditions for optimal waste disposal
-        {"\n\n"}
-      </Text>
+      <View style={styles.section}>
+        <Text style={styles.paragraph}>
+          Eco Arcade is your go-to solution for effective waste management and
+          environmental monitoring. Our application empowers users to track and
+          optimize waste disposal processes while ensuring sustainability and
+          efficiency.
+        </Text>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Features</Text>
+        <Text style={styles.paragraph}>
+          - Real-time monitoring of bin occupancy levels for paper, plastic, and
+          cans.
+          {"\n"}- Environmental parameters tracking including temperature and
+          humidity.
+          {"\n"}- Seamless integration with IoT devices for automated data
+          collection.
+        </Text>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>User Access</Text>
+        <Text style={styles.paragraph}>
+          - **Students:** individual scores to track your environmental
+          contributions.
+          {"\n"}- **Admins:** Manage student information, access functionalities
+          for application management.
+        </Text>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Get Started</Text>
+        <Text style={styles.paragraph}>
+          Download Eco Arcade now and embark on a journey towards a greener and
+          more sustainable future!
+        </Text>
+      </View>
     </View>
   );
 };
@@ -42,23 +58,32 @@ const InformationTab = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 20,
     backgroundColor: "#fff",
+  },
+  headerContainer: {
+    alignItems: "center",
+    marginBottom: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "white",
   },
   separator: {
     height: 1,
-    width: "100%",
     backgroundColor: "#ccc",
-    marginVertical: 16,
+    marginVertical: 10,
+  },
+  section: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
   paragraph: {
     fontSize: 16,
-    marginBottom: 16,
   },
 });
 

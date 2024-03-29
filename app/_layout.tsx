@@ -53,10 +53,12 @@ function RootLayoutNav() {
   }, []);
 
   useEffect(() => {
-    setBottomSheet(sheetRef2);
-    handleSnapPress(snapeIndex);
-
     console.log({ snapeIndex });
+
+    if (snapeIndex !== -1) {
+      setBottomSheet(sheetRef2);
+      handleSnapPress(snapeIndex);
+    }
   }, [snapeIndex]);
 
   return (
@@ -65,7 +67,9 @@ function RootLayoutNav() {
 
       {/* BOTTOM SHEET */}
       <BottomSheet
+        index={-1}
         ref={sheetRef2}
+        animateOnMount={false}
         backgroundStyle={{ backgroundColor: "#051c2e" }}
         handleIndicatorStyle={{
           backgroundColor: "white",

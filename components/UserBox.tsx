@@ -1,7 +1,6 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
 import { TUsers } from "../constants/fakeusers";
-import { Link, router } from "expo-router";
 import AnimatedLottieView from "lottie-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Score from "./Score";
@@ -27,9 +26,9 @@ const UserBox = ({
           source={require("../assets/animated/user.json")}
         />
       </View>
-      <Score label="Can" score={bin_score?.can} />
-      <Score label="Plastic" score={bin_score?.plastic} />
-      <Score label="Paper" score={bin_score?.paper} />
+      <Score label="Can" score={bin_score?.can || 0} />
+      <Score label="Plastic" score={bin_score?.plastic || 0} />
+      <Score label="Paper" score={bin_score?.paper || 0} />
 
       <View className="h-4 absolute top-4 right-2 flex justify-center items-center px-2 ">
         <TouchableOpacity

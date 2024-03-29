@@ -14,7 +14,7 @@ const Signin = ({ navigation }: any) => {
   const { signIn } = useAuth();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isShowPassword, setIsShowPassword] = useState(true);
   const [credential, setCredential] = useState<TCredential>({
     username: "",
     password: "",
@@ -148,14 +148,11 @@ const Signin = ({ navigation }: any) => {
           <View className=" flex-row my-6 justify-center items-center flex">
             <Text className="text-white">Don't have an account?&nbsp; </Text>
             <Pressable onPress={() => navigation.navigate("Signup")}>
-              <Text className="text-blue-500 underline underline-offset-4">
-                Sign up
-              </Text>
+              <Text className="text-blue-500">Sign up</Text>
             </Pressable>
           </View>
         </View>
       </View>
-      {/* <BottomSheetSignIn /> */}
     </View>
   );
 };

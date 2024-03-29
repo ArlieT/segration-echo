@@ -1,8 +1,5 @@
-import { useColorScheme } from "react-native";
-import { useAuth } from "../../_store/useAuthStore";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import CustomDrawerContent from "../../components/CustomDrawer";
-import { useRouter } from "expo-router";
 import InformationTab from "./modal";
 import Signin from "./signin";
 import Signup from "./signup";
@@ -18,10 +15,18 @@ function AppEntry({ navigation }: any) {
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       detachInactiveScreens
-      screenOptions={{ drawerStatusBarAnimation: "none" }}
+      screenOptions={{ drawerStatusBarAnimation: "fade" }}
     >
-      <Drawer.Screen name="Admin" component={AdminScreen} />
-      <Drawer.Screen name="Student" component={UserScreen} />
+      <Drawer.Screen
+        options={{ title: `My profile` }}
+        name="Student"
+        component={UserScreen}
+      />
+      <Drawer.Screen
+        options={{ title: `Admin Dashboard` }}
+        name="Admin"
+        component={AdminScreen}
+      />
       <Drawer.Screen name="Information" component={InformationTab} />
       <Drawer.Screen name="Students" component={Users} />
       <Drawer.Screen name="User" component={Student as any} />

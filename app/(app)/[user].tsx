@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { BackHandler, Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useObject } from "react-firebase-hooks/database";
 import firebaseRef from "../../firebase/ref";
@@ -8,23 +8,53 @@ import { FontAwesome } from "@expo/vector-icons";
 import { TBinScore } from "./(student)";
 import { set } from "firebase/database";
 import useBottomSheetGlobal from "../../_store/useBottomSheetGloba";
+import { ScrollView } from "react-native-gesture-handler";
+import { useNavigation } from "expo-router";
 
 const Student = ({ route }: { route: { params: { username: string } } }) => {
-  const { token } = useAuth();
-
   const { username } = route.params;
   const [student, loading, error] = useObject(
     firebaseRef(`users/STUDENT/${username}`)
   );
 
+  const { token } = useAuth();
+
+  const { navigate } = useNavigation();
+
+  useEffect(() => {
+    const backAction = () => {
+      // Handle custom back button behavior here
+      // For example, prevent going back to the previous screen:
+      // navigation.navigate('Home'); // Navigate to a specific screen
+      navigate("Students" as never);
+      return true; // Prevent default behavior (going back)
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   return (
-    <SafeAreaView className="flex-1 justify-center items-center p-4">
+    // <SafeAreaView className="flex-1 h-full w-full justify-center items-center px-2">
+    <ScrollView
+      contentContainerStyle={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+      className=" w-full h-full p-2"
+    >
       <MyProfile
         username={username}
         count={student?.val()?.bin_score}
         percentage={student?.val()?.bin_score}
       />
-    </SafeAreaView>
+    </ScrollView>
+    // </SafeAreaView>
   );
 };
 
@@ -37,16 +67,14 @@ type Props = {
 };
 
 const MyProfile = ({ username, count }: Props) => {
-  const { token } = useAuth();
-
   return (
-    <View className="rounded-xl p-4 h-full w-full justify-center items-center gap-y-4 bg-white">
+    <View className="rounded-xl h-auto w-full py-4 justify-center items-center gap-y-4 bg-white">
       <View className="h-[64px]">
         <FontAwesome name="user-circle" size={64} />
       </View>
-      <View className="gap-y-6 p-6 w-full">
+      <View className="gap-y-6 px-6 w-full">
         <View className="flex-row">
-          <Text>Name: </Text>
+          <Text>Student name: </Text>
           <Text className="font-bold">{username}</Text>
         </View>
         <View className="flex-row">
@@ -55,11 +83,12 @@ const MyProfile = ({ username, count }: Props) => {
         </View>
       </View>
       <View className="w-full border-t border-black/40" />
-      {token?.role === "ADMIN" ? (
+      {/* {token?.role === "ADMIN" ? (
         <EditableScore count={count} username={username} />
       ) : (
         <DefaultScore count={count} username={username} />
-      )}
+      )} */}
+      <EditableScore count={count} username={username} />
     </View>
   );
 };
@@ -101,6 +130,8 @@ const EditableScore = ({ count, username }: EditableProps) => {
     }));
   };
 
+  const { token } = useAuth();
+
   return (
     <View className="gap-y-6 p-6 w-full">
       <View className="flex gap-y-2">
@@ -110,6 +141,7 @@ const EditableScore = ({ count, username }: EditableProps) => {
         <View className="flex justify-around items-center gap-y-2">
           <Text className="text-left font-semibold w-full">Can:</Text>
           <TextInput
+            editable={username === token?.username || token?.role === "ADMIN"}
             value={String(score?.can || 0)}
             keyboardType="numeric"
             onChangeText={(e) => handleOnchange(e, "can")}
@@ -119,6 +151,7 @@ const EditableScore = ({ count, username }: EditableProps) => {
         <View className="flex justify-around items-center gap-y-2">
           <Text className="text-left font-semibold w-full">Paper</Text>
           <TextInput
+            editable={username === token?.username || token?.role === "ADMIN"}
             value={String(score?.paper || 0)}
             keyboardType="numeric"
             onChangeText={(e) => handleOnchange(e, "paper")}
@@ -128,6 +161,7 @@ const EditableScore = ({ count, username }: EditableProps) => {
         <View className="flex justify-around items-center gap-y-2">
           <Text className="text-left font-semibold w-full">Plastic</Text>
           <TextInput
+            editable={username === token?.username || token?.role === "ADMIN"}
             value={String(score?.plastic || 0)}
             keyboardType="numeric"
             onChangeText={(e) => handleOnchange(e, "plastic")}
@@ -136,12 +170,15 @@ const EditableScore = ({ count, username }: EditableProps) => {
         </View>
       </View>
 
-      <Pressable
-        onPress={handleSaveScore}
-        className="bg-[#051c2e] rounded-xl p-4 w-auto justify-center items-center"
-      >
-        <Text className="text-white">Save</Text>
-      </Pressable>
+      {token?.username === username ||
+        (token?.role === "ADMIN" && (
+          <Pressable
+            onPress={handleSaveScore}
+            className="bg-[#051c2e] rounded-xl p-4 w-auto justify-center items-center"
+          >
+            <Text className="text-white">Save</Text>
+          </Pressable>
+        ))}
     </View>
   );
 };

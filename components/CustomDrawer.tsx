@@ -2,7 +2,6 @@ import React from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useAuth } from "../_store/useAuthStore";
-import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
 const CustomDrawerContent = ({ navigation }: any) => {
@@ -11,14 +10,6 @@ const CustomDrawerContent = ({ navigation }: any) => {
   const handleLogout = async () => {
     await signOut();
     navigation.closeDrawer();
-    navigation.navigate("Signin");
-  };
-
-  const handleLogin = async () => {
-    signIn({ username: "test", password: "test", role: "ADMIN" });
-    // await signOut();
-    navigation.closeDrawer(); // Close the drawer if needed
-    // navigation.navigate("/(auth)/signin");
   };
 
   return (
@@ -33,10 +24,12 @@ const CustomDrawerContent = ({ navigation }: any) => {
               onPress={() => navigation.navigate("Admin")}
             />
           ) : (
-            <DrawerItem
-              label="My Profile"
-              onPress={() => navigation.navigate("Student")}
-            />
+            <View className={`${role === ("ADMIN" as any) ? "hidden" : ""}`}>
+              <DrawerItem
+                label="My Profile"
+                onPress={() => navigation.navigate("Student")}
+              />
+            </View>
           )}
 
           <DrawerItem
@@ -47,8 +40,17 @@ const CustomDrawerContent = ({ navigation }: any) => {
             label="Information"
             onPress={() => navigation.navigate("Information")}
           />
-          <DrawerItem label="" onPress={() => navigation.navigate("Signin")} />
-          <DrawerItem label="" onPress={() => navigation.navigate("Signup")} />
+
+          <View className="hidden">
+            <DrawerItem
+              label=""
+              onPress={() => navigation.navigate("Signin")}
+            />
+            <DrawerItem
+              label=""
+              onPress={() => navigation.navigate("Signup")}
+            />
+          </View>
         </View>
 
         {/* Custom Button */}
