@@ -68,6 +68,7 @@ const Signin = ({ navigation }: any) => {
           navigation.navigate("Student");
         }
       }, 1200);
+      setIsSubmitting(false);
     } else {
       setError("Invalid username or password");
       setIsSubmitting(false);
@@ -77,6 +78,7 @@ const Signin = ({ navigation }: any) => {
   useEffect(() => {
     //RESET CREDENTIAL
     return () => {
+      setIsSubmitting(false);
       setCredential({
         username: "",
         password: "",

@@ -141,7 +141,7 @@ const EditableScore = ({ count, username }: EditableProps) => {
         <View className="flex justify-around items-center gap-y-2">
           <Text className="text-left font-semibold w-full">Can:</Text>
           <TextInput
-            editable={username === token?.username || token?.role === "ADMIN"}
+            editable={token?.role === "ADMIN"}
             value={String(score?.can || 0)}
             keyboardType="numeric"
             onChangeText={(e) => handleOnchange(e, "can")}
@@ -151,7 +151,7 @@ const EditableScore = ({ count, username }: EditableProps) => {
         <View className="flex justify-around items-center gap-y-2">
           <Text className="text-left font-semibold w-full">Paper</Text>
           <TextInput
-            editable={username === token?.username || token?.role === "ADMIN"}
+            editable={token?.role === "ADMIN"}
             value={String(score?.paper || 0)}
             keyboardType="numeric"
             onChangeText={(e) => handleOnchange(e, "paper")}
@@ -161,7 +161,7 @@ const EditableScore = ({ count, username }: EditableProps) => {
         <View className="flex justify-around items-center gap-y-2">
           <Text className="text-left font-semibold w-full">Plastic</Text>
           <TextInput
-            editable={username === token?.username || token?.role === "ADMIN"}
+            editable={token?.role === "ADMIN"}
             value={String(score?.plastic || 0)}
             keyboardType="numeric"
             onChangeText={(e) => handleOnchange(e, "plastic")}
