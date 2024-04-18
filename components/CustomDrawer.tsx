@@ -32,10 +32,13 @@ const CustomDrawerContent = ({ navigation }: any) => {
             </View>
           )}
 
-          <DrawerItem
-            label="List of Students"
-            onPress={() => navigation.navigate("Students")}
-          />
+          <View className={`${role === ("STUDENT" as any) ? "hidden" : ""}`}>
+            <DrawerItem
+              label="List of Students"
+              onPress={() => navigation.navigate("Students")}
+            />
+          </View>
+
           <DrawerItem
             label="Information"
             onPress={() => navigation.navigate("Information")}

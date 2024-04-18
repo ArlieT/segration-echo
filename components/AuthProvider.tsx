@@ -12,9 +12,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     console.log({ token });
-
     if (status !== "signIn") {
-      console.log("true");
       navigation?.navigate("Signin" as never);
       return;
     }

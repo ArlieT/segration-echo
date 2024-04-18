@@ -22,11 +22,30 @@ export default function UserScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [info, setInfo] = useState<ModalProps>();
-  const [bin, setBin] = useState<TBin>();
-  const [binCount, setBinCount] = useState<TBin>();
+  const [bin, setBin] = useState<TBin>(); //for percentage
+  const [binCount, setBinCount] = useState<TBin>(); //for count
   const [student, loading, error] = useObject(
     firebaseRef(`users/STUDENT/${user?.username}`)
   );
+
+  const [binCount_] = useObject(
+    firebaseRef(`users/STUDENT/${user?.username}/bin_count`)
+  );
+
+  useEffect(() => {
+    onValue(firebaseRef("Bin"), (snapshot) => {
+      const data = snapshot.val();
+      setBin(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    setBinCount(binCount_?.val());
+  }, []);
+
+  useEffect(() => {
+    console.log("test", user?.bin_count);
+  }, [user]);
 
   useEffect(() => {
     /* mock loading */
@@ -36,17 +55,6 @@ export default function UserScreen() {
     setTimeout(() => {
       setIsLoading(false);
     }, randomValue);
-  }, []);
-
-  useEffect(() => {
-    onValue(firebaseRef("Bin"), (snapshot) => {
-      const data = snapshot.val();
-      setBin(data);
-    });
-    onValue(firebaseRef("BottleCount"), (snapshot) => {
-      const data = snapshot.val();
-      setBinCount(data);
-    });
   }, []);
 
   const { navigate } = useNavigation();
@@ -86,14 +94,14 @@ export default function UserScreen() {
 
             <MyProfile
               username={user?.username}
-              percentage={student?.val()?.bin_score}
-              count={student?.val()?.bin_count}
+              percentage={user?.bin_count}
+              count={user?.bin_count as any}
             />
-            <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-1">
+            <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-[0.8]">
               <Bin
                 label="Plactic Bin"
                 percentage={bin?.plastic}
-                count={binCount?.plastic}
+                count={user?.bin_count?.plastic}
                 // color="#051c2e"
                 color="rgba(5, 28, 46, 0.9)"
                 setInfo={setInfo}
@@ -101,17 +109,16 @@ export default function UserScreen() {
               />
               <Bin
                 label="Paper Bin"
-                count={binCount?.paper}
-                percentage={bin?.paper}
-                // color="#051c2e"
+                percentage={bin?.paper} //global
+                count={user?.bin_count?.paper} //user count
                 color="rgba(5, 28, 46, 0.9)"
                 setInfo={setInfo}
                 setModal={setIsModalOpen}
               />
               <Bin
                 label="Can Bin"
-                count={binCount?.can}
-                percentage={bin?.can}
+                percentage={bin?.can} //global
+                count={user?.bin_count?.can}
                 color="rgba(5, 28, 46, 0.9)"
                 setInfo={setInfo}
                 setModal={setIsModalOpen}

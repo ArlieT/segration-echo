@@ -1,9 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TBin } from "../../app/(app)/(tabs)";
 
 export type TCredential = {
   username: string;
   password: string;
   role?: "STUDENT" | "ADMIN" | "";
+  bin_score: TBin | undefined;
+  bin_count: TBin | undefined;
 };
 const setToken = async (credential: TCredential) => {
   await AsyncStorage.setItem("user", JSON.stringify(credential));

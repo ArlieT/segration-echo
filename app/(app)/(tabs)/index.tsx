@@ -118,7 +118,7 @@ export default function AdminScreen() {
             />
             <View
               style={styles.top3Container}
-              className="outline outline-red-500"
+              className="outline w-full outline-red-500"
             >
               <View className="flex flex-row justify-between">
                 <View>
@@ -262,6 +262,7 @@ const styles = StyleSheet.create({
     fontWeight: "medium",
   },
   scrollView: {
+    width: "100%",
     marginVertical: 2,
   },
   contentContainer: {

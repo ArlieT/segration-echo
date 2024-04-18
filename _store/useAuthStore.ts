@@ -6,6 +6,7 @@ type AuthStore = {
   status: TStatus;
   role: "STUDENT" | "ADMIN" | "";
   token: TCredential | null;
+
   signIn: (token: TCredential) => void;
   signOut: () => void;
   hydrate: () => void;
@@ -16,6 +17,7 @@ const useAuth = create<AuthStore>((set, get) => {
     status: "idle",
     token: null,
     role: "",
+
     signIn: async (token: TCredential) => {
       await setToken(token);
       set({ status: "signIn", token, ...token });
@@ -27,7 +29,6 @@ const useAuth = create<AuthStore>((set, get) => {
     hydrate: async () => {
       try {
         const userToken = await getToken();
-        // console.log({ userToken });
         if (userToken !== null) {
           get().signIn(userToken);
         } else {

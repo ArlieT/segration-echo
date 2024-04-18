@@ -44,19 +44,13 @@ const Signin = ({ navigation }: any) => {
       setIsSubmitting(false);
       return;
     }
-    // console.log("test__ ", users);
-
-    // console.log("users: ", users?.[0]?.val()?.username);
 
     // Check if users data is available
-    console.log({ credential });
 
     const user = users?.find(
       (user) =>
         user?.val()?.username === username && user?.val()?.password === password
     );
-
-    console.log({ users });
 
     signIn(user?.val());
 

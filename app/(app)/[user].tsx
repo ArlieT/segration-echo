@@ -10,6 +10,7 @@ import { set } from "firebase/database";
 import useBottomSheetGlobal from "../../_store/useBottomSheetGloba";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "expo-router";
+import Score from "../../components/Score";
 
 const Student = ({ route }: { route: { params: { username: string } } }) => {
   const { username } = route.params;
@@ -39,7 +40,6 @@ const Student = ({ route }: { route: { params: { username: string } } }) => {
   }, []);
 
   return (
-    // <SafeAreaView className="flex-1 h-full w-full justify-center items-center px-2">
     <ScrollView
       contentContainerStyle={{
         flex: 1,
@@ -50,11 +50,10 @@ const Student = ({ route }: { route: { params: { username: string } } }) => {
     >
       <MyProfile
         username={username}
-        count={student?.val()?.bin_score}
-        percentage={student?.val()?.bin_score}
+        count={student?.val()?.bin_count}
+        percentage={student?.val()?.bin_percentage}
       />
     </ScrollView>
-    // </SafeAreaView>
   );
 };
 
@@ -68,7 +67,7 @@ type Props = {
 
 const MyProfile = ({ username, count }: Props) => {
   return (
-    <View className="rounded-xl h-auto w-full py-4 justify-center items-center gap-y-4 bg-white">
+    <View className="flex-1 rounded-xl h-auto w-full py-4 justify-center items-center gap-y-4 bg-white">
       <View className="h-[64px]">
         <FontAwesome name="user-circle" size={64} />
       </View>
@@ -83,11 +82,7 @@ const MyProfile = ({ username, count }: Props) => {
         </View>
       </View>
       <View className="w-full border-t border-black/40" />
-      {/* {token?.role === "ADMIN" ? (
-        <EditableScore count={count} username={username} />
-      ) : (
-        <DefaultScore count={count} username={username} />
-      )} */}
+
       <EditableScore count={count} username={username} />
     </View>
   );
@@ -100,12 +95,16 @@ type EditableProps = {
 };
 
 const EditableScore = ({ count, username }: EditableProps) => {
-  const [score, setScore] = useState<TBinScore | undefined>(count);
+  const [student, loading, error] = useObject(
+    firebaseRef(`users/STUDENT/${username}`)
+  );
+
+  const [score, setScore] = useState<TBinScore | undefined>(0);
   const { bottomSheetRef, setSnapeIndex, snapeIndex } = useBottomSheetGlobal();
 
   useEffect(() => {
-    if (count) setScore(count);
-  }, [count]);
+    if (student) setScore(student?.val().bin_score);
+  }, [student]);
 
   const handleSaveScore = () => {
     if (snapeIndex === 0) {
@@ -132,9 +131,20 @@ const EditableScore = ({ count, username }: EditableProps) => {
 
   const { token } = useAuth();
 
+  if (token?.role === "STUDENT") return;
+
   return (
     <View className="gap-y-6 p-6 w-full">
       <View className="flex gap-y-2">
+        <Text className="text-lg text-left font-bold w-full">
+          Student contributions
+        </Text>
+        {/* for counts only */}
+        <View className="flex flex-row gap-x-2 w-full">
+          <Score label="Can" score={count?.can || 0} />
+          <Score label="Plastic" score={count?.plastic || 0} />
+          <Score label="Paper" score={count?.paper || 0} />
+        </View>
         <Text className="text-lg text-left font-bold w-full">
           Student Score
         </Text>
@@ -165,7 +175,7 @@ const EditableScore = ({ count, username }: EditableProps) => {
             value={String(score?.plastic || 0)}
             keyboardType="numeric"
             onChangeText={(e) => handleOnchange(e, "plastic")}
-            className="w-full font-semibold rounded-[10px] px-[12px] border py-2"
+            className="w-full rounded-[10px] px-[12px] border py-2"
           />
         </View>
       </View>

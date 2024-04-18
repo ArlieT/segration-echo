@@ -16,20 +16,21 @@ const UserBox = ({
   return (
     <View
       style={{ elevation: 20 }}
-      className={`${className} w-full border border-gray-300/50 shadow-md bg relative gray-300/50 max-h-[400px] mb-2 py-6 pt-12 bg-white C/w-full text-white justify-around items-center flex-row rounded-md`}
+      className={`${className} w-full border-gray-300/50 shadow-md bg relative gray-300/50 max-h-[400px] mb-2 py-6 pt-12 bg-white C/w-full text-white justify-around items-center flex-row rounded-md`}
     >
-      <View className="justify-center items-center">
-        <Text className="font-bold text">{username}</Text>
+      <View className="justify-center flex-[0.3] items-center">
+        <Text className="font-bold text">{username || "anonymous"}</Text>
         <AnimatedLottieView
           autoPlay
           style={{ width: 30, height: 30 }}
           source={require("../assets/animated/user.json")}
         />
       </View>
-      <Score label="Can" score={bin_score?.can || 0} />
-      <Score label="Plastic" score={bin_score?.plastic || 0} />
-      <Score label="Paper" score={bin_score?.paper || 0} />
-
+      <View className="flex flex-row flex-1">
+        <Score label="Can" score={bin_score?.can || 0} />
+        <Score label="Plastic" score={bin_score?.plastic || 0} />
+        <Score label="Paper" score={bin_score?.paper || 0} />
+      </View>
       <View className="h-4 absolute top-4 right-2 flex justify-center items-center px-2 ">
         <TouchableOpacity
           onPress={() => navigation.navigate("User", { username })}

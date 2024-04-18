@@ -1,6 +1,7 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useAuth } from "../_store/useAuthStore";
 
 export type ModalProps = {
   count?: string;
@@ -9,6 +10,7 @@ export type ModalProps = {
   setIsModalOpen: (b: boolean) => void;
 };
 const BinModal = (info?: ModalProps) => {
+  const { token: user } = useAuth();
   return (
     <Pressable
       onPress={() => info?.setIsModalOpen(false)}
@@ -22,7 +24,7 @@ const BinModal = (info?: ModalProps) => {
         right: 0,
         top: 0,
         bottom: 0,
-        zIndex: 20
+        zIndex: 20,
       }}
     >
       <View className="justify-between gap-y-6 bg-white w-[80%] pt-0 h-[40%] rounded-xl px-4 pb-4">
@@ -54,11 +56,12 @@ const BinModal = (info?: ModalProps) => {
             gap: 12,
             flex: 1,
             justifyContent: "center",
-            alignContent: "center"
+            alignContent: "center",
           }}
         >
           <Text style={{ fontSize: 16, color: "black" }}>
-            Count: {info?.count}
+            {user?.role === "STUDENT" ? "My contribution" : "Total Count"} :{" "}
+            {info?.count}
           </Text>
           <Text style={{ fontSize: 16, color: "black" }}>
             Bin percentage: {info?.percentage}%

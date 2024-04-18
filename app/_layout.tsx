@@ -53,8 +53,6 @@ function RootLayoutNav() {
   }, []);
 
   useEffect(() => {
-    console.log({ snapeIndex });
-
     if (snapeIndex !== -1) {
       setBottomSheet(sheetRef2);
       handleSnapPress(snapeIndex);
