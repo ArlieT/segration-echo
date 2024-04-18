@@ -27,7 +27,7 @@ const useAuth = create<AuthStore>((set, get) => {
     hydrate: async () => {
       try {
         const userToken = await getToken();
-        // console.log({ userToken });
+        console.log({ userToken });
         if (userToken !== null) {
           get().signIn(userToken);
         } else {
