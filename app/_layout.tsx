@@ -77,7 +77,7 @@ function RootLayoutNav() {
       >
         <View style={styles.contentContainer} className=" pt-10">
           <View className="rounded-md w-4/5 flex-row p-4 justify-center items-center bg-white">
-            <Text className="text-lg font-semibold">Score saved </Text>
+            <Text className="text-lg font-semibold">Score updated &nbsp;</Text>
             <Text>
               <TabBarIcon name="check-circle" color="black" />,
             </Text>

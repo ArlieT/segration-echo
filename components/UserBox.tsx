@@ -12,7 +12,7 @@ const UserBox = ({
   username,
   ...props
 }: TUsers & { className?: string }) => {
-  const navigation = useNavigation();
+  const { navigate } = useNavigation();
   return (
     <View
       style={{ elevation: 20 }}
@@ -33,7 +33,7 @@ const UserBox = ({
       </View>
       <View className="h-4 absolute top-4 right-2 flex justify-center items-center px-2 ">
         <TouchableOpacity
-          onPress={() => navigation.navigate("User", { username })}
+          onPress={() => navigate("User", { username })}
           className="p-3 hover:bg-red-500  group-isolate gap-x-1 flex-row"
         >
           <View className="group-isolate-hover:bg-red-500 w-1.5 h-1.5 rounded-full bg-gray-800"></View>

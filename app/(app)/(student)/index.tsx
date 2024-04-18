@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BackHandler, StyleSheet, View } from "react-native";
+import { BackHandler, StyleSheet, Text, View } from "react-native";
 import Bin from "../../../components/bin/Bin";
 import Loading from "../../../components/Loading";
 import firebaseRef from "../../../firebase/ref";
@@ -10,6 +10,7 @@ import { useObject } from "react-firebase-hooks/database";
 import { useNavigation } from "expo-router";
 import { onValue } from "firebase/database";
 import { TBin } from "../(tabs)";
+import Score from "../../../components/Score";
 
 export type TBinScore = {
   plastic: string;
@@ -32,6 +33,10 @@ export default function UserScreen() {
     firebaseRef(`users/STUDENT/${user?.username}/bin_count`)
   );
 
+  const [score] = useObject(
+    firebaseRef(`users/STUDENT/${user?.username}/bin_score`)
+  );
+
   useEffect(() => {
     onValue(firebaseRef("Bin"), (snapshot) => {
       const data = snapshot.val();
@@ -40,8 +45,9 @@ export default function UserScreen() {
   }, []);
 
   useEffect(() => {
+    console.log("bn ", binCount_?.val());
     setBinCount(binCount_?.val());
-  }, []);
+  }, [binCount_]);
 
   useEffect(() => {
     console.log("test", user?.bin_count);
@@ -58,14 +64,11 @@ export default function UserScreen() {
   }, []);
 
   const { navigate } = useNavigation();
-
   useEffect(() => {
     const backAction = () => {
-      // Handle custom back button behavior here
-      // For example, prevent going back to the previous screen:
-      // navigation.navigate('Home'); // Navigate to a specific screen
       navigate("Student" as never);
-      return true; // Prevent default behavior (going back)
+      //don nothing
+      return true; // if true prevent where pressing back button will take you back to previous screen like signin
     };
 
     const backHandler = BackHandler.addEventListener(
@@ -74,7 +77,7 @@ export default function UserScreen() {
     );
 
     return () => backHandler.remove();
-  }, []);
+  }, [navigate]);
 
   return (
     <>
@@ -82,7 +85,7 @@ export default function UserScreen() {
         <Loading />
       ) : (
         <>
-          <View style={styles.container} className="gap-y-2">
+          <View style={styles.container} className="bg-white gap-y-2">
             {isModalOpen && (
               <BinModal
                 setIsModalOpen={setIsModalOpen}
@@ -96,12 +99,14 @@ export default function UserScreen() {
               username={user?.username}
               percentage={user?.bin_count}
               count={user?.bin_count as any}
+              score={score?.val()}
             />
-            <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-[0.8]">
+
+            {/* <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between p-2 flex-[0.8]">
               <Bin
                 label="Plactic Bin"
                 percentage={bin?.plastic}
-                count={user?.bin_count?.plastic}
+                count={bin?.plastic}
                 // color="#051c2e"
                 color="rgba(5, 28, 46, 0.9)"
                 setInfo={setInfo}
@@ -109,8 +114,8 @@ export default function UserScreen() {
               />
               <Bin
                 label="Paper Bin"
-                percentage={bin?.paper} //global
-                count={user?.bin_count?.paper} //user count
+                percentage={binCount?.paper} //global
+                count={binCount?.paper} //user count
                 color="rgba(5, 28, 46, 0.9)"
                 setInfo={setInfo}
                 setModal={setIsModalOpen}
@@ -118,12 +123,12 @@ export default function UserScreen() {
               <Bin
                 label="Can Bin"
                 percentage={bin?.can} //global
-                count={user?.bin_count?.can}
+                count={binCount?.can}
                 color="rgba(5, 28, 46, 0.9)"
                 setInfo={setInfo}
                 setModal={setIsModalOpen}
               />
-            </View>
+            </View> */}
             {/* <View className="flex-row rounded-md bg-[#fbfbfb] w-full justify-between gap-x0 p-2 flex-[1]">
               <Bin
                 label="Plactic Bin"

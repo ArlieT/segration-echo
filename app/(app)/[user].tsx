@@ -11,15 +11,20 @@ import useBottomSheetGlobal from "../../_store/useBottomSheetGloba";
 import { ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "expo-router";
 import Score from "../../components/Score";
+import AnimatedLottieView from "lottie-react-native";
 
 const Student = ({ route }: { route: { params: { username: string } } }) => {
   const { username } = route.params;
+  const { token: user } = useAuth();
   const [student, loading, error] = useObject(
-    firebaseRef(`users/STUDENT/${username}`)
+    firebaseRef(`users/STUDENT/${username || user?.username}`)
   );
 
-  const { token } = useAuth();
+  const [score] = useObject(
+    firebaseRef(`users/STUDENT/${username || user?.username}/bin_score`)
+  );
 
+  console.log("usernameeeee ", username);
   const { navigate } = useNavigation();
 
   useEffect(() => {
@@ -52,6 +57,7 @@ const Student = ({ route }: { route: { params: { username: string } } }) => {
         username={username}
         count={student?.val()?.bin_count}
         percentage={student?.val()?.bin_percentage}
+        score={score?.val()}
       />
     </ScrollView>
   );
@@ -63,15 +69,18 @@ type Props = {
   username?: string;
   percentage?: TBinScore;
   count: TBinScore;
+  score: TBinScore;
 };
 
-const MyProfile = ({ username, count }: Props) => {
+const MyProfile = ({ username, count, score }: Props) => {
+  const { token: user } = useAuth();
+
   return (
-    <View className="flex-1 rounded-xl h-auto w-full py-4 justify-center items-center gap-y-4 bg-white">
+    <View className="flex-1 rounded-xl h-auto w-full py-4 justify-center items-center bg-white">
       <View className="h-[64px]">
         <FontAwesome name="user-circle" size={64} />
       </View>
-      <View className="gap-y-6 px-6 w-full">
+      <View className="flex-1 space-y-4 px-4 w-full">
         <View className="flex-row">
           <Text>Student name: </Text>
           <Text className="font-bold">{username}</Text>
@@ -80,8 +89,49 @@ const MyProfile = ({ username, count }: Props) => {
           <Text>Role: </Text>
           <Text className="font-bold">{"Student"}</Text>
         </View>
+        {user?.role === "ADMIN" ? (
+          <View className="bg-white w-full flex-1 flex-col flex rounded-lg">
+            <Text className="text-lg text-left font-bold w-full mb-1">
+              Score:
+            </Text>
+            <View className="flex h-4/5 flex-row">
+              <Score label="Can" score={score?.can || 0} />
+              <Score label="Plastic" score={score?.plastic || 0} />
+              <Score label="Paper" score={score?.paper || 0} />
+            </View>
+          </View>
+        ) : (
+          <View className="bg-white w-full flex-[0.4] flex-col py-2 flex rounded-lg">
+            <Text className="text-lg text-left font-bold w-full mb-1">
+              My Score:
+            </Text>
+            <View className="flex h-4/5 flex-row">
+              <Score label="Can" score={score?.can || 0} />
+              <Score label="Plastic" score={score?.plastic || 0} />
+              <Score label="Paper" score={score?.paper || 0} />
+            </View>
+            <View className="">
+              <AnimatedLottieView
+                autoPlay
+                resizeMode="cover"
+                style={{
+                  width: "auto",
+                  height: "auto",
+                  opacity: 0.2,
+                  margin: "auto",
+                  top: 7,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                }}
+                source={require("../../assets/animated/Trash.json")}
+              />
+            </View>
+          </View>
+        )}
       </View>
-      <View className="w-full border-t border-black/40" />
+
+      {/* <View className="w-full border-t border-black/40" /> */}
 
       <EditableScore count={count} username={username} />
     </View>
@@ -99,7 +149,9 @@ const EditableScore = ({ count, username }: EditableProps) => {
     firebaseRef(`users/STUDENT/${username}`)
   );
 
-  const [score, setScore] = useState<TBinScore | undefined>(0);
+  console.log({ username });
+
+  const [score, setScore] = useState<TBinScore | undefined>(undefined);
   const { bottomSheetRef, setSnapeIndex, snapeIndex } = useBottomSheetGlobal();
 
   useEffect(() => {
@@ -134,20 +186,9 @@ const EditableScore = ({ count, username }: EditableProps) => {
   if (token?.role === "STUDENT") return;
 
   return (
-    <View className="gap-y-6 p-6 w-full">
+    <View className="bg-white px-4 flex-[1.5] w-full">
       <View className="flex gap-y-2">
-        <Text className="text-lg text-left font-bold w-full">
-          Student contributions
-        </Text>
-        {/* for counts only */}
-        <View className="flex flex-row gap-x-2 w-full">
-          <Score label="Can" score={count?.can || 0} />
-          <Score label="Plastic" score={count?.plastic || 0} />
-          <Score label="Paper" score={count?.paper || 0} />
-        </View>
-        <Text className="text-lg text-left font-bold w-full">
-          Student Score
-        </Text>
+        <Text className="text-lg text-left font-bold w-full">Edit Score</Text>
         <View className="flex justify-around items-center gap-y-2">
           <Text className="text-left font-semibold w-full">Can:</Text>
           <TextInput
@@ -184,7 +225,7 @@ const EditableScore = ({ count, username }: EditableProps) => {
         (token?.role === "ADMIN" && (
           <Pressable
             onPress={handleSaveScore}
-            className="bg-[#051c2e] rounded-xl p-4 w-auto justify-center items-center"
+            className="bg-[#051c2e] mt-4 rounded-xl p-4 w-auto justify-center items-center"
           >
             <Text className="text-white">Save</Text>
           </Pressable>

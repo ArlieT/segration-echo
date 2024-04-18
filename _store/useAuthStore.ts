@@ -29,10 +29,7 @@ const useAuth = create<AuthStore>((set, get) => {
     hydrate: async () => {
       try {
         const userToken = await getToken();
-<<<<<<< HEAD
-=======
         console.log({ userToken });
->>>>>>> 4879d91648271d80fa144d107474b9f399dae021
         if (userToken !== null) {
           get().signIn(userToken);
         } else {

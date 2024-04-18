@@ -24,11 +24,7 @@ const Signin = ({ navigation }: any) => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(true);
-  const [credential, setCredential] = useState<TCredential>({
-    username: "",
-    password: "",
-    role: "",
-  });
+  const [credential, setCredential] = useState<TCredential | null>(null);
 
   const [adminSnapshot] = useList(firebaseRef("users/ADMIN"));
   const [studentSnapshot] = useList(firebaseRef("users/STUDENT"));
@@ -40,6 +36,11 @@ const Signin = ({ navigation }: any) => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    if (!credential) {
+      setError("fill all fields");
+      setIsSubmitting(false);
+      return;
+    }
     const { username, password } = credential;
 
     // Validate username and password length
@@ -82,10 +83,7 @@ const Signin = ({ navigation }: any) => {
     //RESET CREDENTIAL
     return () => {
       setIsSubmitting(false);
-      setCredential({
-        username: "",
-        password: "",
-      });
+      setCredential(null);
     };
   }, []);
 
@@ -98,6 +96,7 @@ const Signin = ({ navigation }: any) => {
   }, [error]);
 
   useEffect(() => {
+    if (!navigate) return;
     const backAction = () => {
       // Handle custom back button behavior here
       // For example, prevent going back to the previous screen:
@@ -112,8 +111,8 @@ const Signin = ({ navigation }: any) => {
     );
 
     return () => backHandler.remove();
-  }, []);
-
+  }, [navigate]);
+  const { token: user } = useAuth();
   return (
     <View style={styles.container} className="border">
       <StatusBar style="light" />
@@ -131,7 +130,7 @@ const Signin = ({ navigation }: any) => {
         <View className="w-full justify-center items-center p-4">
           <Text className="text-white text-lg text-left w-full">Username</Text>
           <TextInput
-            value={credential.username}
+            value={user?.username}
             onChangeText={(e) => setCredential({ ...credential, username: e })}
             style={styles.input}
             className="w-full "
@@ -140,7 +139,7 @@ const Signin = ({ navigation }: any) => {
 
           <View className="block justify-center items-center relative  w-full">
             <TextInput
-              value={credential.password}
+              value={user?.password}
               onChangeText={(e) =>
                 setCredential({ ...credential, password: e })
               }

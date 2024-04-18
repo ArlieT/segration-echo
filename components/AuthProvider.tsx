@@ -11,13 +11,8 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const { status, token, hydrate } = useAuth();
 
   useEffect(() => {
-<<<<<<< HEAD
-    console.log({ token });
-    if (status !== "signIn") {
-=======
     if (status === "signOut" || !token) {
       console.log("should navigate to signin");
->>>>>>> 4879d91648271d80fa144d107474b9f399dae021
       navigation?.navigate("Signin" as never);
     }
     if (token?.role === "ADMIN") {

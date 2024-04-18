@@ -28,7 +28,6 @@ export default function AdminScreen() {
   const [binCount, setBinCount] = useState<TBin>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [info, setInfo] = useState<ModalProps>();
-
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -79,14 +78,12 @@ export default function AdminScreen() {
     return totalScoreB - totalScoreA;
   });
 
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
   useEffect(() => {
     const backAction = () => {
-      // Handle custom back button behavior here
-      // For example, prevent going back to the previous screen:
-      // navigation.navigate('Home'); // Navigate to a specific screen
       navigate("Admin" as never);
-      return true; // Prevent default behavior (going back)
+      //don nothing
+      return true; // if true prevent where pressing back button will take you back to previous screen like signin
     };
 
     const backHandler = BackHandler.addEventListener(

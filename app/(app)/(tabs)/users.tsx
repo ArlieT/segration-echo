@@ -1,12 +1,14 @@
-import { SafeAreaView, StyleSheet } from "react-native";
+import { BackHandler, SafeAreaView, StyleSheet } from "react-native";
 import { Text, View } from "../../../components/Themed";
 import UserBox from "../../../components/UserBox";
 import { ScrollView } from "react-native-gesture-handler";
-import React from "react";
+import React, { useEffect } from "react";
 import firebaseRef from "../../../firebase/ref";
 import { useList } from "react-firebase-hooks/database";
+import { useNavigation } from "expo-router";
 
 export default function Users({}) {
+  const { navigate } = useNavigation();
   const [studentList, loading, error] = useList(firebaseRef(`users/STUDENT`));
 
   const studentArray: any[] = [];
@@ -29,6 +31,23 @@ export default function Users({}) {
 
     return totalScoreB - totalScoreA;
   });
+
+  useEffect(() => {
+    const backAction = () => {
+      // Handle custom back button behavior here
+      // For example, prevent going back to the previous screen:
+      // navigation.navigate('Home'); // Navigate to a specific screen
+      navigate("Admin" as never);
+      return true; // Prevent default behavior (going back)
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container} className="">
