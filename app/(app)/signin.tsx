@@ -1,4 +1,11 @@
-import { View, TextInput, Text, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  Text,
+  Pressable,
+  StyleSheet,
+  BackHandler,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import { useAuth } from "../../_store/useAuthStore";
@@ -9,8 +16,10 @@ import { StatusBar } from "expo-status-bar";
 import { useList } from "react-firebase-hooks/database";
 import firebaseRef from "../../firebase/ref";
 import { DataSnapshot } from "firebase/database";
+import { useNavigation } from "expo-router";
 
 const Signin = ({ navigation }: any) => {
+  const { navigate } = useNavigation();
   const { signIn } = useAuth();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -87,6 +96,23 @@ const Signin = ({ navigation }: any) => {
       }, 3000);
     }
   }, [error]);
+
+  useEffect(() => {
+    const backAction = () => {
+      // Handle custom back button behavior here
+      // For example, prevent going back to the previous screen:
+      // navigation.navigate('Home'); // Navigate to a specific screen
+      navigate("Signin" as never);
+      return true; // Prevent default behavior (going back)
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <View style={styles.container} className="border">

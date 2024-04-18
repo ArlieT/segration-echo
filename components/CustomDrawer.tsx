@@ -5,11 +5,12 @@ import { useAuth } from "../_store/useAuthStore";
 import { StatusBar } from "expo-status-bar";
 
 const CustomDrawerContent = ({ navigation }: any) => {
-  const { signOut, signIn, status, role } = useAuth();
+  const { signOut, role } = useAuth();
 
   const handleLogout = async () => {
-    await signOut();
+    signOut();
     navigation.closeDrawer();
+    navigation.navigate("Signin");
   };
 
   return (
