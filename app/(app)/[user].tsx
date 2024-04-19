@@ -155,7 +155,7 @@ const EditableScore = ({ count, username }: EditableProps) => {
   const { bottomSheetRef, setSnapeIndex, snapeIndex } = useBottomSheetGlobal();
 
   useEffect(() => {
-    if (student) setScore(student?.val().bin_score);
+    if (student) setScore(student?.val()?.bin_score);
   }, [student]);
 
   const handleSaveScore = () => {

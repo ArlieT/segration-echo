@@ -67,7 +67,7 @@ export default function UserScreen() {
   useEffect(() => {
     const backAction = () => {
       navigate("Student" as never);
-      //don nothing
+      //do nothing
       return true; // if true prevent where pressing back button will take you back to previous screen like signin
     };
 

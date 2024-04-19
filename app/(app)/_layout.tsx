@@ -1,8 +1,8 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import CustomDrawerContent from "../../components/CustomDrawer";
 import InformationTab from "./modal";
-import Signin from "./signin";
-import Signup from "./signup";
+import Signin from "../(auth)/signin";
+import Signup from "../(auth)/signup";
 import UserScreen from "./(student)";
 import AdminScreen from "./(tabs)";
 import Users from "./(tabs)/users";

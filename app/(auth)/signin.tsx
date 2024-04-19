@@ -130,8 +130,9 @@ const Signin = ({ navigation }: any) => {
         <View className="w-full justify-center items-center p-4">
           <Text className="text-white text-lg text-left w-full">Username</Text>
           <TextInput
-            value={user?.username}
-            onChangeText={(e) => setCredential({ ...credential, username: e })}
+            onChangeText={(e) =>
+              setCredential({ ...credential, username: e } as any)
+            }
             style={styles.input}
             className="w-full "
           />
@@ -139,9 +140,8 @@ const Signin = ({ navigation }: any) => {
 
           <View className="block justify-center items-center relative  w-full">
             <TextInput
-              value={user?.password}
               onChangeText={(e) =>
-                setCredential({ ...credential, password: e })
+                setCredential({ ...credential, password: e } as any)
               }
               secureTextEntry={isShowPassword}
               style={styles.input}

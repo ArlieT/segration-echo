@@ -27,18 +27,27 @@ const Signup = ({ navigation }: any) => {
     username: "",
     password: "",
     role: "",
-  });
+  } as any);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    const { username, password, role = "STUDENT" } = credential;
+    const { username, password, role } = credential;
 
     if (password.length < 4) {
       setError({
         message: "Password must be at least 4 characters long",
         status: "error",
       });
+      return;
+    }
+
+    if (!role) {
+      setError({
+        message: "Select role",
+        status: "error",
+      });
+      setIsSubmitting(false);
       return;
     }
 
@@ -71,7 +80,7 @@ const Signup = ({ navigation }: any) => {
       setCredential({
         username: "",
         password: "",
-      });
+      } as any);
     };
   }, []);
 
