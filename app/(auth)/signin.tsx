@@ -17,9 +17,10 @@ import { useList } from "react-firebase-hooks/database";
 import firebaseRef from "../../firebase/ref";
 import { DataSnapshot } from "firebase/database";
 import { useNavigation } from "expo-router";
+import { useRouter } from "expo-router";
 
 const Signin = ({ navigation }: any) => {
-  const { navigate } = useNavigation();
+  const { navigate, setOptions } = useNavigation();
   const { signIn } = useAuth();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,12 +45,12 @@ const Signin = ({ navigation }: any) => {
     const { username, password } = credential;
 
     // Validate username and password length
-    if (username.length <= 3) {
+    if (username.length < 3) {
       setError("Username must be at least 4 characters long");
       setIsSubmitting(false);
       return;
     }
-    if (password.length <= 3) {
+    if (password.length < 3) {
       setError("Password must be at least 4 characters long");
       setIsSubmitting(false);
       return;
@@ -67,9 +68,11 @@ const Signin = ({ navigation }: any) => {
     if (user) {
       setTimeout(() => {
         if (user?.val()?.role === "ADMIN") {
-          navigation.navigate("Admin");
+          navigation?.navigate("Admin");
+          router?.push("/(admin)/");
         } else if (user?.val()?.role === "STUDENT") {
-          navigation.navigate("Student");
+          navigation?.navigate("Student");
+          router?.push("/(student)");
         }
       }, 1200);
       setIsSubmitting(false);
@@ -95,6 +98,8 @@ const Signin = ({ navigation }: any) => {
     }
   }, [error]);
 
+  const router = useRouter();
+
   useEffect(() => {
     if (!navigate) return;
     const backAction = () => {
@@ -112,6 +117,11 @@ const Signin = ({ navigation }: any) => {
 
     return () => backHandler.remove();
   }, [navigate]);
+
+  useEffect(() => {
+    setOptions({ headerShown: false });
+  }, [setOptions]);
+
   const { token: user } = useAuth();
   return (
     <View style={styles.container} className="border">
@@ -130,8 +140,10 @@ const Signin = ({ navigation }: any) => {
         <View className="w-full justify-center items-center p-4">
           <Text className="text-white text-lg text-left w-full">Username</Text>
           <TextInput
-            value={user?.username}
-            onChangeText={(e) => setCredential({ ...credential, username: e })}
+            // value={user?.username}
+            onChangeText={(e) =>
+              setCredential({ ...credential, username: e } as any)
+            }
             style={styles.input}
             className="w-full "
           />
@@ -139,9 +151,9 @@ const Signin = ({ navigation }: any) => {
 
           <View className="block justify-center items-center relative  w-full">
             <TextInput
-              value={user?.password}
+              // value={user?.password}
               onChangeText={(e) =>
-                setCredential({ ...credential, password: e })
+                setCredential({ ...credential, password: e } as any)
               }
               secureTextEntry={isShowPassword}
               style={styles.input}

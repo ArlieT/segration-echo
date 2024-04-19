@@ -1,11 +1,16 @@
-import { BackHandler, SafeAreaView, StyleSheet } from "react-native";
-import { Text, View } from "../../../components/Themed";
-import UserBox from "../../../components/UserBox";
+import {
+  BackHandler,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import React, { useEffect } from "react";
-import firebaseRef from "../../../firebase/ref";
 import { useList } from "react-firebase-hooks/database";
 import { useNavigation } from "expo-router";
+import firebaseRef from "../../firebase/ref";
+import UserBox from "../../components/UserBox";
 
 export default function Users({}) {
   const { navigate } = useNavigation();

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, ScrollView, BackHandler } from "react-native";
-import UserBox from "../../../components/UserBox";
-import Bin from "../../../components/bin/Bin";
-import Loading from "../../../components/Loading";
 import { onValue } from "firebase/database";
-import firebaseRef from "../../../firebase/ref";
-import BinModal, { ModalProps } from "../../../components/BinModal";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useList } from "react-firebase-hooks/database";
-import Weather from "../../../components/Weather";
 import { useNavigation } from "expo-router/src/useNavigation";
+import firebaseRef from "../../firebase/ref";
+import BinModal, { ModalProps } from "../../components/BinModal";
+import Loading from "../../components/Loading";
+import Weather from "../../components/Weather";
+import UserBox from "../../components/UserBox";
+import Bin from "../../components/bin/Bin";
 
 type TWeater = {
   temperature: string;

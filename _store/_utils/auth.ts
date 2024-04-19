@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { TBin } from "../../app/(app)/(tabs)";
+import { TBin } from "../../_backup-pages/__(app)/(admin)";
 
 export type TCredential = {
   username: string;

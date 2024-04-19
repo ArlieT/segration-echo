@@ -5,7 +5,7 @@ import { useObject } from "react-firebase-hooks/database";
 import firebaseRef from "../../firebase/ref";
 import { useAuth } from "../../_store/useAuthStore";
 import { FontAwesome } from "@expo/vector-icons";
-import { TBinScore } from "./(student)";
+import { TBinScore } from "../../app/(student)";
 import { set } from "firebase/database";
 import useBottomSheetGlobal from "../../_store/useBottomSheetGloba";
 import { ScrollView } from "react-native-gesture-handler";

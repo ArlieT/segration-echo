@@ -1,7 +1,8 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
+import { Link, Slot, Stack, Tabs, useLocalSearchParams } from "expo-router";
 import { Pressable, StyleSheet, View, useColorScheme } from "react-native";
-import { useAuth } from "../../../_store/useAuthStore";
+import { hydrateAuth } from "../../_store/useAuthStore";
+import { Drawer } from "expo-router/drawer";
 
 export function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -12,11 +13,10 @@ export function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { token, hydrate } = useAuth();
-  // hydrate(); //HYDRATE AUTH
-
+  const params = useLocalSearchParams();
+  hydrateAuth();
   return (
-    <View></View>
+    <Slot />
     // <Tabs
     //   screenOptions={{
     //     tabBarStyle: {
@@ -27,14 +27,14 @@ export default function TabLayout() {
     //       justifyContent: "center",
     //       alignItems: "center",
     //     },
-    //     headerShown: true,
+    //     headerShown: false,
     //   }}
     // >
     //   <Tabs.Screen
     //     name="index"
     //     options={{
-    //       title: `Student ${token?.username}`,
-    //       tabBarLabel: "Studentsss", // Remove the label
+    //       title: "Admin Dashboard",
+    //       tabBarLabel: "", // Remove the label
     //       tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
     //       headerRight: () => (
     //         <Link href="/modal" asChild>
@@ -53,11 +53,44 @@ export default function TabLayout() {
     //     }}
     //   />
     //   <Tabs.Screen
-    //     name="about"
+    //     name="users"
     //     options={{
-    //       headerShown: true,
+    //       title: "Users",
+    //       headerShown: false,
     //       tabBarLabel: "", // Remove the label
-    //       tabBarIcon: ({ color }) => <TabBarIcon name="info" color={color} />,
+
+    //       tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
+    //     }}
+    //   />
+    //   <Tabs.Screen
+    //     name="[user]"
+    //     options={{
+    //       title: "",
+    //       // title: (params?.user as string) || "User",
+    //       headerShown: true,
+    //       tabBarLabel: "",
+    //       href: null,
+
+    //       headerRight: () => (
+    //         <Link className="font-bold text-lg pr-4" href="/">
+    //           {params?.user}
+    //         </Link>
+    //       ),
+    //       headerLeft: () => (
+    //         <Link href="/users" asChild className="pl-4">
+    //           <Pressable>
+    //             {({ pressed }) => (
+    //               <FontAwesome
+    //                 name="chevron-left"
+    //                 // color={Colors["light"].text}
+    //                 size={24}
+    //                 style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+    //               />
+    //             )}
+    //           </Pressable>
+    //         </Link>
+    //       ),
+    //       tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
     //     }}
     //   />
     // </Tabs>

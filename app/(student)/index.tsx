@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { BackHandler, StyleSheet, Text, View } from "react-native";
-import Bin from "../../../components/bin/Bin";
-import Loading from "../../../components/Loading";
-import firebaseRef from "../../../firebase/ref";
-import BinModal, { ModalProps } from "../../../components/BinModal";
-import { useAuth } from "../../../_store/useAuthStore";
-import { MyProfile } from "../[user]";
+import { Alert, BackHandler, StyleSheet, Text, View } from "react-native";
+import Bin from "../../components/bin/Bin";
+import Loading from "../../components/Loading";
+import firebaseRef from "../../firebase/ref";
+import BinModal, { ModalProps } from "../../components/BinModal";
+import { useAuth } from "../../_store/useAuthStore";
+import { MyProfile } from "../../_backup-pages/__(app)/[user]";
 import { useObject } from "react-firebase-hooks/database";
 import { useNavigation } from "expo-router";
 import { onValue } from "firebase/database";
-import { TBin } from "../(tabs)";
-import Score from "../../../components/Score";
+import { TBin } from "../(admin)";
+import Score from "../../components/Score";
 
 export type TBinScore = {
   plastic: string;
@@ -63,7 +63,7 @@ export default function UserScreen() {
     }, randomValue);
   }, []);
 
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
   useEffect(() => {
     const backAction = () => {
       navigate("Student" as never);
@@ -77,7 +77,7 @@ export default function UserScreen() {
     );
 
     return () => backHandler.remove();
-  }, [navigate]);
+  }, []);
 
   return (
     <>

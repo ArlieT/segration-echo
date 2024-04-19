@@ -1,6 +1,6 @@
 import React from "react";
 import { Stack, Tabs } from "expo-router";
-import { TabBarIcon } from "../app/(app)/(tabs)/_layout";
+import { TabBarIcon } from "../_backup-pages/__(app)/(admin)/_layout";
 
 const _layout = () => {
   return (

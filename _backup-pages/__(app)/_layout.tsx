@@ -1,47 +1,48 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import CustomDrawerContent from "../../components/CustomDrawer";
 import InformationTab from "./modal";
-import Signin from "./signin";
-import Signup from "./signup";
-import UserScreen from "./(student)";
-import AdminScreen from "./(tabs)";
-import Users from "./(tabs)/users";
+import Signin from "../../app/(auth)/signin";
+import Signup from "../../app/(auth)/signup";
+import UserScreen from "../../app/(student)";
+
 import Student from "./[user]";
+import { Slot, Stack } from "expo-router";
 
 function AppEntry({ navigation }: any) {
   const Drawer = createDrawerNavigator();
 
   return (
-    <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
-      detachInactiveScreens
-      screenOptions={{ drawerStatusBarAnimation: "fade" }}
-    >
-      <Drawer.Screen
-        options={{ title: `My profile` }}
-        name="Student"
-        component={UserScreen}
-      />
-      <Drawer.Screen
-        options={{ title: `Admin Dashboard` }}
-        name="Admin"
-        component={AdminScreen}
-      />
-      <Drawer.Screen name="Information" component={InformationTab} />
-      <Drawer.Screen name="Students" component={Users} />
-      <Drawer.Screen name="User" component={Student as any} />
-      {/* empty label / label == invisible */}
-      <Drawer.Screen
-        name="Signin"
-        options={{ title: "", headerShown: false }}
-        component={Signin}
-      />
-      <Drawer.Screen
-        name="Signup"
-        options={{ headerShown: false }}
-        component={Signup}
-      />
-    </Drawer.Navigator>
+    <Stack screenOptions={{ headerShown: false }} />
+    // <Drawer.Navigator
+    //   drawerContent={(props) => <CustomDrawerContent {...props} />}
+    //   detachInactiveScreens
+    //   screenOptions={{ drawerStatusBarAnimation: "fade" }}
+    // >
+    //   <Drawer.Screen
+    //     options={{ title: `My profile` }}
+    //     name="Student"
+    //     component={UserScreen}
+    //   />
+    //   <Drawer.Screen
+    //     options={{ title: `Admin Dashboard` }}
+    //     name="Admin"
+    //     component={AdminScreen}
+    //   />
+    //   <Drawer.Screen name="Information" component={InformationTab} />
+    //   <Drawer.Screen name="Students" component={Users} />
+    //   <Drawer.Screen name="User" component={Student as any} />
+    //   {/* empty label / label == invisible */}
+    //   <Drawer.Screen
+    //     name="Signin"
+    //     options={{ title: "", headerShown: false }}
+    //     component={Signin}
+    //   />
+    //   <Drawer.Screen
+    //     name="Signup"
+    //     options={{ headerShown: false }}
+    //     component={Signup}
+    //   />
+    // </Drawer.Navigator>
 
     //DEFAULT DRAWER
     // <Drawer
