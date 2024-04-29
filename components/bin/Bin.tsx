@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Animated, {
+  useAnimatedStyle,
   useSharedValue,
   withSpring,
-  useAnimatedStyle,
 } from "react-native-reanimated";
 
 const Bin = ({
@@ -22,19 +22,14 @@ const Bin = ({
   setInfo: (i: any) => void;
 }) => {
   const [localPercentage, setLocalPercentage] = useState(0);
-  const height = useSharedValue(localPercentage);
 
+  const height = useSharedValue(0);
   useEffect(() => {
     const percentageParsed = Number(percentage);
     setTimeout(() => {
-      if (percentageParsed == 1) {
-        setLocalPercentage(30);
-      } else if (percentageParsed == 2) {
-        setLocalPercentage(50);
-      } else if (percentageParsed == 3) {
-        setLocalPercentage(100);
-      }
-    }, 1000);
+      //if percentage is 1 it will be 10 and so on
+      setLocalPercentage(percentageParsed * 10);
+    }, 700);
   }, [percentage]);
 
   useEffect(() => {
@@ -45,16 +40,11 @@ const Bin = ({
     return {
       height: `${height.value}%`,
     };
-  });
+  }, [localPercentage]);
 
   const handlePressBin = () => {
     setModal(true);
     setInfo({ count, percentage: localPercentage, label });
-  };
-
-  //testing animation
-  const handlePress = () => {
-    height.value = withSpring(height.value + 10);
   };
 
   return (
