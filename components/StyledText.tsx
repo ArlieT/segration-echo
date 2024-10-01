@@ -2,11 +2,9 @@ import { StyleSheet } from "react-native";
 import { Text, TextProps } from "./Themed";
 
 export function BlueText(props: TextProps) {
-  return <Text {...props} style={[styles.text, props.style]} />;
+  return <Text {...props} className="text-blue-500" />;
 }
 
-const styles = StyleSheet.create({
-  text: {
-    color: "#3F85EF",
-  },
-});
+export function BlackText(props: TextProps) {
+  return <Text {...props} className="text-[#051c2e]" />;
+}
